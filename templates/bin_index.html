@@ -52,7 +52,7 @@
 	<script>
 	setTimeout(function() {
 		if(typeof(EventSource) !== "undefined") {
-			var source = new EventSource("triggerrefresh.py");
+			var source = new EventSource("triggerrefresh");
 			source.onmessage = function(event) {
 				if (event.data == "reload") {
 					var meta = document.createElement('meta');

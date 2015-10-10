@@ -18,6 +18,9 @@ app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 app.secret_key = '\xf9ZNd2\xef\x89\xa8\xe1\x10\x95;\xd6\xdcl\xf3\xed\xfe\xbd\x88 ;\x08O'
 
+def raise_helper(msg):
+    raise Exception(msg)
+
 ####### authentication #######
 
 def check_auth(username, password):
@@ -63,7 +66,10 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_server_error(error):
 	import traceback
-	return render_template('500.html', error="\n"+traceback.format_exc().rstrip()), 500
+	if "Warning" in traceback.format_exc():
+		return render_template('userwarning.html', error=error), 200
+	else:
+		return render_template('500.html', error="\n"+traceback.format_exc().rstrip()), 500
 
 @app.route('/')
 def index():
@@ -169,6 +175,7 @@ def triggerrefresh():
 	def events():
 		ttime = 0
 		while True:
+			reload(common)
 			content = int(common.readsettings("REFRESH"))
 			if int(content) == 1:
 				yield "data: reload\n\n"
@@ -179,8 +186,7 @@ def triggerrefresh():
 				break
 			else:
 				time.sleep(3)
-
-		ttime += 3
+			ttime += 3
 
 	return Response(events(), content_type='text/event-stream')
 
@@ -191,7 +197,7 @@ def comprollen():
 	url = request.args.get('url', None)
 	typ = request.args.get('type', None)
 	speed = request.args.get('speed', None)
-	return render_template('comprollen.html', url=url, typ=typ, speed=speed)
+	return render_template('comprollen.html', url=url, typ=typ, speed=speed, common=common)
 
 @app.route('/admin/')
 @requires_auth
@@ -403,6 +409,8 @@ def admin_setn():
 
 	elif "triggerrefresh" in referer:
 		refresh = url_for('admin_index')
+
+	common.writesettings("REFRESH", "1")
 
 	return render_template('admin_setn.html', refresh=refresh)
 

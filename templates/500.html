@@ -2,10 +2,6 @@
 {% block head %}
 	<meta http-equiv="refresh" content="60">
 	<style>
-	html, body {
-		height: 100%; 
-		overflow: hidden;
-	}
 	body {
 		background-image: url({{ url_for('static', filename='img/500.jpg') }});
 		background-size: auto 40%;
@@ -13,12 +9,12 @@
 		background-repeat: no-repeat;
 	}
 	pre {
-	 white-space: pre-wrap;
-	 white-space: -moz-pre-wrap;
-	 white-space: -o-pre-wrap;
-	 background: #eee;
-	 padding-left: 20px; padding-right: 20px;
-	 border: 1px solid #aaa;
+		white-space: pre-wrap;
+		white-space: -moz-pre-wrap;
+		white-space: -o-pre-wrap;
+		background: #eee;
+		padding-left: 20px; padding-right: 20px;
+		border: 1px solid #aaa;
 	}
 	</style>
 {% endblock %}

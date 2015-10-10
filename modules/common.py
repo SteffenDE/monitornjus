@@ -18,10 +18,13 @@ dbpath = workingdir+'/../MonitorNjus.db'
 ############################## Settings ##############################
 
 debugv = 2				# Verbosity: 0,1,2 (0 = off, 1 = basic, 2 = mit Anmerkungen, 3 = Traceback, 707 = Easter Egg)
-triggerrefresh = False	# Only enable when running with production webserver! (not e.g. Flask dev server)
+triggerrefresh = True	# Only enable when running with production webserver! (not e.g. Flask dev server)
 #authentication = False	# Authentication settings in monitornjus.py!
 
 ######################### basics #########################
+
+def raise_helper(message):
+	exec('raise '+message)
 
 def getinfo(Info, Seite, Nummer):
 	cursor = conn.execute("SELECT "+Info+" FROM DISPLAYSETS WHERE SEITE=? AND NUMMER=?", [unicode(Seite), unicode(Nummer)]);

@@ -130,5 +130,5 @@
 </body>
 </html>
 {% else %}
-	<h1>Falscher oder fehlender Queryparameter: type</h1>
+{{ common.raise_helper("Warning('Falscher oder fehlernder Queryparameter: type')") }}
 {% endif %}

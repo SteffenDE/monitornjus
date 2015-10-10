@@ -27,5 +27,7 @@
 <frameset frameborder="0" rows="*,0">
 	<frame scrolling="no" src="contentset?seite=2" name="rechts" />
 </frameset>
+{% else %}
+{{ common.raise_helper("Warning('Keine Seite aktiv!')") }}
 {% endif %}
 </html>
