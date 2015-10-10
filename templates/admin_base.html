@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+	<link href="{{ url_for('static', filename='css/materialize.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<title>{% block title %}MonitorNjus Admin-Panel{% endblock %}</title>
+	<!-- MonitorNjus -->
+	<!-- Copyright (c) {{ common.datum.year }} Steffen Deusch -->
+	<!-- https://github.com/SteffenDE/MonitorNjus -->
+	{{ colors.adminstyles|safe }}
+</head>
+<body>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
+	<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.min.js') }}"></script>
+	<nav class="{{ colors.color }} navigation">
+		<div class="container">
+			<div class="nav-wrapper">
+				<a id="logo-container" href="../admin/" class="brand-logo">MonitorNjus Admin-Panel</a>
+				<a href="#" data-activates="mobile" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+				{% for item in range(0,2) %}
+				{% if item == 0 %}
+				<ul id="nav-mobile" class="right hide-on-med-and-down">
+				{% else %}
+				<ul class="side-nav" id="mobile">
+				{% endif %}
+				{% for href, name in navigation %}
+					<li {{ 'class="active"'|safe if sitename in name.lower() }}><a href="{{ href }}">{{ name }}</a></li>
+				{% endfor %}
+				</ul>
+				{% endfor %}
+			</div>
+		</div>
+	</nav>
+	{% block content %}{% endblock %}
+	{% block footer %}
+	<footer class="page-footer {{ colors.color }}">
+		<div class="container">
+			<div class="row">
+				<div class="col l6 s12">
+					<h5 class="white-text">MonitorNjus für das JVG-Ehingen</h5>
+				</div>
+			</div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+				&copy; Steffen Deusch {{ common.datum.year }}
+				<a class="grey-text text-lighten-4 right" href="https://github.com/SteffenDE/monitornjus">{{ common.version|safe }}</a>
+			</div>
+		</div>
+	</footer>
+	<!-- Scripts -->
+	<script type="text/javascript" src="{{ url_for('static', filename='js/init.js') }}"></script>
+	{% endblock %}
+</body>
+</html>

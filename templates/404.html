@@ -1,0 +1,5 @@
+{% extends 'error_base.html' %}
+{% block content %}
+		<h3>Huch?</h3>
+		<h4>Die Seite "{{ get_flashed_messages()[0] }}" wurde nicht gefunden!<br>(HTTP 404 / <i>Not Found</i>)</h4>
+{% endblock %}

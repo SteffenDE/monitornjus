@@ -1,0 +1,196 @@
+{% extends 'admin_base.html' %}
+{% set sitename = 'haupteinstellungen' %}
+{% set rows = common.getrows() %}
+{% set rowsone = rows + 1 %}
+{% block content %}
+	<h3 class="header center {{ colors.color }}-text">Haupteinstellungen</h3>
+	<div class="container">
+		<div class="row">
+			<form class="col s12" action="{{ url_for('admin_setn') }}" method="post">
+				<input type="hidden" name="referer" value="index" />
+				<div class="row">
+		{% for item in range(0,rows+1) %}
+			{% if item|string in common.getallrows() %}
+					<div class="col s12">
+						<h5 class="header center {{ colors.color }}-text">Displayset {{ item }}</h5>
+						<div class="row">
+							<div class="col s6">
+								<div class="card white darken-1">
+									<div class="card-content white-text">
+										<span class="card-title {{ colors.color }}-text text-darken-2">Linke Seite</span><br>
+										<div class="row">
+											<div class="input-field col s6">
+												<input value="{{ common.testexist("URL", "Links", item) }}" name="URL-Links-{{ item }}" id="URL-Links-{{ item }}" type="text">
+												<label for="URL-Links-{{ item }}">URL Links</label>
+											</div>
+											<div class="input-field col s6">
+												<input value="{{ common.testexist("REFRESH", "Links", item) }}" name="REFRESH-Links-{{ item }}" id="REFRESH-Links-{{ item }}" type="number">
+												<label for="REFRESH-Links-{{ item }}">Refresh Links</label>
+											</div>
+										</div>
+										<div>
+											<input type="checkbox" name="AKTIV-Links-{{ item }}" id="AKTIV-Links-{{ item }}" {{ common.aktiv("AKTIV", "Links", item)|safe }}/>
+											<label for="AKTIV-Links-{{ item }}">Links aktiviert</label>&nbsp;&nbsp;&nbsp;&nbsp;
+											<input type="hidden" value="0" name="HIDDEN.AKTIV-Links-{{ item }}">
+											<input type="checkbox" name="REFRESHAKTIV-Links-{{ item }}" id="REFRESHAKTIV-Links-{{ item }}" {{ common.aktiv("REFRESHAKTIV", "Links", item)|safe }}/>
+											<label for="REFRESHAKTIV-Links-{{ item }}">Links neu laden</label>
+											<input type="hidden" value="0" name="HIDDEN.REFRESHAKTIV-Links-{{ item }}">
+										</div>
+										<div class="row">
+											<div class="input-field col s4">
+												<input value="{{ common.getdate("uhrzeit", "Links", item) }}" name="uhrzeit-Links-{{ item }}" id="uhrzeit-Links-{{ item }}" type="text">
+												<label for="uhrzeit-Links-{{ item }}">Uhrzeit</label>
+											</div>
+											<div class="input-field col s4">
+												<input value="{{ common.getdate("wochentag", "Links", item) }}" name="wochentag-Links-{{ item }}" id="wochentag-Links-{{ item }}" type="text">
+												<label for="wochentag-Links-{{ item }}">Wochentag</label>
+											</div>
+											<div class="input-field col s2">
+												<input value="{{ common.getdate("tag", "Links", item) }}" name="tag-Links-{{ item }}" id="tag-Links-{{ item }}" type="text">
+												<label for="tag-Links-{{ item }}">Tag</label>
+											</div>
+											<div class="input-field col s2">
+												<input value="{{ common.getdate("monat", "Links", item) }}" name="monat-Links-{{ item }}" id="monat-Links-{{ item }}" type="text">
+												<label for="monat-Links-{{ item }}">Monat</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINLEFT","Links", item) }}" name="MARGINLEFT-Links-{{ item }}" id="MARGINLEFT-Links-{{ item }}" type="text">
+												<label for="MARGINLEFT-Links-{{ item }}">Rand-Links</label>
+											</div>
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINRIGHT","Links", item) }}" name="MARGINRIGHT-Links-{{ item }}" id="MARGINRIGHT-Links-{{ item }}" type="text">
+												<label for="MARGINRIGHT-Links-{{ item }}">Rand-Rechts</label>
+											</div>
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINTOP","Links", item) }}" name="MARGINTOP-Links-{{ item }}" id="MARGINTOP-Links-{{ item }}" type="text">
+												<label for="MARGINTOP-Links-{{ item }}">Rand-Oben</label>
+											</div>
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINBOTTOM","Links", item) }}" name="MARGINBOTTOM-Links-{{ item }}" id="MARGINBOTTOM-Links-{{ item }}" type="text">
+												<label for="MARGINBOTTOM-Links-{{ item }}">Rand-Unten</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col s6">
+								<div class="card white darken-1">
+									<div class="card-content white-text">
+										<span class="card-title {{ colors.color }}-text text-darken-2">Rechte Seite</span><br>
+										<div class="row">
+											<div class="input-field col s6">
+												<input value="{{ common.testexist("URL", "Rechts", item) }}" name="URL-Rechts-{{ item }}" id="URL-Rechts-{{ item }}" type="text">
+												<label for="URL-Rechts-{{ item }}">URL Rechts</label>
+											</div>
+											<div class="input-field col s6">
+												<input value="{{ common.testexist("REFRESH", "Rechts", item) }}" name="REFRESH-Rechts-{{ item }}" id="REFRESH-Rechts-{{ item }}" type="number">
+												<label for="REFRESH-Rechts-{{ item }}">Refresh Rechts</label>
+											</div>
+										</div>
+										<div>
+											<input type="checkbox" name="AKTIV-Rechts-{{ item }}" id="AKTIV-Rechts-{{ item }}" {{ common.aktiv("AKTIV", "Rechts", item)|safe }}/>
+											<label for="AKTIV-Rechts-{{ item }}">Rechts aktiviert</label>&nbsp;&nbsp;&nbsp;&nbsp;
+											<input type="hidden" value="0" name="HIDDEN.AKTIV-Rechts-{{ item }}">
+											<input type="checkbox" name="REFRESHAKTIV-Rechts-{{ item }}" id="REFRESHAKTIV-Rechts-{{ item }}" {{ common.aktiv("REFRESHAKTIV", "Rechts", item)|safe }}/>
+											<label for="REFRESHAKTIV-Rechts-{{ item }}">Rechts neu laden</label>
+											<input type="hidden" value="0" name="HIDDEN.REFRESHAKTIV-Rechts-{{ item }}">
+										</div>
+										<div class="row">
+											<div class="input-field col s4">
+												<input value="{{ common.getdate("uhrzeit", "Rechts", item) }}" name="uhrzeit-Rechts-{{ item }}" id="uhrzeit-Rechts-{{ item }}" type="text">
+												<label for="uhrzeit-Rechts-{{ item }}">Uhrzeit</label>
+											</div>
+											<div class="input-field col s4">
+												<input value="{{ common.getdate("wochentag", "Rechts", item) }}" name="wochentag-Rechts-{{ item }}" id="wochentag-Rechts-{{ item }}" type="text">
+												<label for="wochentag-Rechts-{{ item }}">Wochentag</label>
+											</div>
+											<div class="input-field col s2">
+												<input value="{{ common.getdate("tag", "Rechts", item) }}" name="tag-Rechts-{{ item }}" id="tag-Rechts-{{ item }}" type="text">
+												<label for="tag-Rechts-{{ item }}">Tag</label>
+											</div>
+											<div class="input-field col s2">
+												<input value="{{ common.getdate("monat", "Rechts", item) }}" name="monat-Rechts-{{ item }}" id="monat-Rechts-{{ item }}" type="text">
+												<label for="monat-Rechts-{{ item }}">Monat</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINLEFT","Rechts", item) }}" name="MARGINLEFT-Rechts-{{ item }}" id="MARGINLEFT-Rechts-{{ item }}" type="text">
+												<label for="MARGINLEFT-Rechts-{{ item }}">Rand-Links</label>
+											</div>
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINRIGHT","Rechts", item) }}" name="MARGINRIGHT-Rechts-{{ item }}" id="MARGINRIGHT-Rechts-{{ item }}" type="text">
+												<label for="MARGINRIGHT-Rechts-{{ item }}">Rand-Rechts</label>
+											</div>
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINTOP","Rechts", item) }}" name="MARGINTOP-Rechts-{{ item }}" id="MARGINTOP-Rechts-{{ item }}" type="text">
+												<label for="MARGINTOP-Rechts-{{ item }}">Rand-Oben</label>
+											</div>
+											<div class="input-field col s3">
+												<input value="{{ common.getinfo("MARGINBOTTOM","Rechts", item) }}" name="MARGINBOTTOM-Rechts-{{ item }}" id="MARGINBOTTOM-Rechts-{{ item }}" type="text">
+												<label for="MARGINBOTTOM-Rechts-{{ item }}">Rand-Unten</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+				{% if rows != 1 %}
+						<center><a class="waves-effect waves-light btn" href="setn?referer=row&delnum={{ item }}">Displayset l&ouml;schen</a></center>
+				{% endif %}
+						</div>
+					</div>
+			{% endif %}
+		{% endfor %}
+					<div class="col s12">
+						<center><a class="btn waves-effect waves-light {{ colors.color }}" href=setn?referer=row&createnum={{ rowsone }}><i class="mdi-content-add"></i></a></center>
+						<p class="range-field"><input type="range" id="teilung" name="teilung" min="1" max="99" value="{{ common.readsettings("TEILUNG") }}" /></p>
+						<div class="row">
+							<div class="col s6">
+								<div class="card white darken-1">
+									<div class="card-content white-text">
+										<span class="card-title {{ colors.color }}-text text-darken-2">Alle Seiten</span><br>
+										<div class="row">
+											<div class="input-field col s12">
+												<input value="{{ common.testexist("REFRESH", "global", 0) }}" name="REFRESH-global-0" id="REFRESH-global-0" type="text">
+												<label for="REFRESH-global-0">Alle Seiten neu laden</label>
+											</div>
+										</div>
+										<div>
+											<input type="checkbox" name="REFRESHAKTIV-global-0" id="REFRESHAKTIV-global-0" {{ common.aktiv("REFRESHAKTIV", "global", 0)|safe }}/>
+											<label for="REFRESHAKTIV-global-0">Globales neu laden aktiviert</label>
+											<input type="hidden" value="0" name="HIDDEN.REFRESHAKTIV-global-0">
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col s6">
+								<div class="card white darken-1">
+									<div class="card-content white-text">
+										<span class="card-title {{ colors.color }}-text text-darken-2">Monitornjus Frontend</span><br>
+										<div class="row">
+											<div class="input-field col s12">
+												<input value="{{ common.testexist("REFRESH", "globalmon", 0) }}" name="REFRESH-globalmon-0" id="REFRESH-globalmon-0" type="text">
+												<label for="REFRESH-globalmon-0">Monitornjus Frontend neu laden</label>
+											</div>
+										</div>
+										<div>
+											<input type="checkbox" name="REFRESHAKTIV-globalmon-0" id="REFRESHAKTIV-globalmon-0" {{ common.aktiv("REFRESHAKTIV", "globalmon", 0)|safe }}/>
+											<label for="REFRESHAKTIV-globalmon-0">Monitornjus neu laden</label>
+											<input type="hidden" value="0" name="HIDDEN.REFRESHAKTIV-globalmon-0">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<button class="btn waves-effect waves-light" type="submit">Abschicken<i class="mdi-content-send right"></i></button>
+	{% if common.triggerrefresh %}
+						<a class="waves-effect waves-light btn right" href="setn?referer=triggerrefresh">Neuladen auslösen</a>
+	{% endif %}
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

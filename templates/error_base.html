@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<link href="{{ url_for('static', filename='css/materialize.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<title>{{ title }}</title>
+	{% block head %}
+	{% endblock %}
+</head>
+<!--
+Was willst du denn hier im Quelltext?
+Neugierig ts ts ts...
+-->
+<body>
+	<div class="container">
+	{% block content %}
+	{% endblock %}
+	</div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	{% if refreshon %}
+	<meta http-equiv="refresh" content="{{ refresh }}; URL=contentset?seite={{ seite }}&nummer={{ nextnummer }}">
+	{% endif %}
+	<title>MonitorNjus</title>
+	<!-- MonitorNjus -->
+	<!-- Copyright (c) {{ common.datum.year }} Steffen Deusch -->
+	<!-- https://github.com/SteffenDE/MonitorNjus -->
+	<style>
+	{% if typ == 'video' %}
+	.videocontainer 
+	{
+		position:absolute;
+		height:100%;
+		width:100%;
+		overflow: hidden;
+		top: 0px;
+	}
+	.videocontainer video 
+	{
+		min-width: 100%;
+		min-height: 100%;
+	}
+	{% elif typ == 'image' %}
+	#background {
+		position: absolute;
+		min-height:100%;
+		width: 100%;
+		height: auto;
+		top: 0;
+		left: 0;
+		background: url({{ url }}) no-repeat center center;
+		background-size: contain;         /* around images */
+	{% endif %}
+	iframe {
+		padding-left: 0px;
+		padding-right: 0px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+		box-sizing: border-box;
+	}
+	.fadeIn {
+		opacity:0;
+		-webkit-animation:fadeIn ease-in 1;
+		-moz-animation:fadeIn ease-in 1;
+		-o-animation:fadeIn ease-in 1;
+		animation:fadeIn ease-in 1;
+		-webkit-animation-fill-mode:forwards;
+		-moz-animation-fill-mode:forwards;
+		-o-animation-fill-mode:forwards;
+		animation-fill-mode:forwards;
+	}
+	.fadeIn-animation {
+		-webkit-animation-duration:0.8s;
+		-moz-animation-duration:0.8s;
+		-o-animation-duration:0.8s;
+		animation-duration:0.8s;
+	}
+	@-webkit-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+	@-moz-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+	@-o-keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+	@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+	{% if typ != ('image' or 'video') %}
+	iframe {
+		padding-left: {{ common.addpx(common.getinfo("MARGINLEFT", mseite, nummer)) }};
+		padding-right: {{ common.addpx(common.getinfo("MARGINRIGHT", mseite, nummer)) }};
+		padding-top: {{ common.addpx(common.getinfo("MARGINTOP", mseite, nummer)) }};
+		padding-bottom: {{ common.addpx(common.getinfo("MARGINBOTTOM", mseite, nummer)) }};
+		box-sizing: border-box;
+	}
+	{% endif %}
+	</style>
+</head>
+<body class="fadeIn fadeIn-animation">
+	{% if typ == 'image' %}
+	<div id="background"></div>
+	{% elif typ == 'video' %}
+	<div class="videocontainer"><video src="{{ url }}" style="width:100%; height:auto; max-height: 100%;" autoplay="autoplay" loop="loop">Dein Browser unterst&uuml;tzt keine HTML5 Videos...</video></div>
+	{% elif typ == 'pdf' %}
+	<iframe src="{{ url }}" style="position:absolute; z-index:9; height:98%; width:98%; border-style:none; overflow:hidden" scrolling="no" frameborder="0"></iframe>
+	{% elif typ == 'youtube' %}
+	<iframe style="position:absolute; height:100%; width:100%; top:0px; left: 0px; border-style:none; overflow:hidden" scrolling="no" frameborder="0" src="//www.youtube.com/embed/{{ getytid.video_id(url) }}?rel=0&autoplay=1&loop=1&controls=0&showinfo=0"></iframe>
+	{% else %}
+	<iframe src="{{ url }}" style="position:absolute; width:100%; height:100%; top:0px; left:0px; border-style:none;" scrolling="no" frameborder="0"></iframe>
+	{% endif %}
+</body>
+</html>

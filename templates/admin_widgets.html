@@ -1,0 +1,194 @@
+{% extends 'admin_base.html' %}
+{% set sitename = 'widgets' %}
+{% block content %}
+	<h3 class="header center {{ colors.color }}-text">Widgets</h3>
+	<div class="container">
+		<div class="row">
+			<div class="col s6">
+				<form class="col s12" action="{{ url_for('admin_setn') }}" method="post">
+					<input type="hidden" name="referer" value="widgets" />
+					<ul class="collapsible" data-collapsible="accordion">
+{% set count = common.getwidgets() %}
+{% for item in count %}
+	{% set typ = common.getwidgTYPfromID(item) %}
+		{% if typ == "Adminlink" %}
+						<li>
+							<div class="collapsible-header active">{{ item }}. Admin-Link</div>
+							<div class="collapsible-body">
+								<div class="container" style="min-width: 100%; padding-top: 5%;">
+									<input type="checkbox" name="AKTIV-Adminlink-{{ item }}" id="AKTIV-Adminlink-{{ item }}" {{ common.widgaktiv("Adminlink", item)|safe }}/>
+									<label for="AKTIV-Adminlink-{{ item }}">Adminlink aktiviert</label>
+									<input type="hidden" value="0" name="HIDDEN.AKTIV-Adminlink-{{ item }}">
+									<div class="row">
+										<div class="col s6">
+											<select name="valign-Adminlink-{{ item }}">{{ common.valign("Adminlink", item, "valign")|safe }}
+											</select>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Adminlink", item, "align") }}' name="align-Adminlink-{{ item }}" id="align-Adminlink-{{ item }}" type="text"/>
+													<label for="align-Adminlink-{{ item }}">Vertikaler Abstand</label>
+												</div>
+											</div>
+										</div>
+										<div class="col s6">
+											<select name="vmargin-Adminlink-{{ item }}">{{ common.valign("Adminlink", item, "vmargin")|safe }}
+											</select>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Adminlink", item, "margin") }}' name="margin-Adminlink-{{ item }}" id="margin-Adminlink-{{ item }}" type="text"/>
+													<label for="margin-Adminlink-{{ item }}">Horizontaler Abstand</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+		{% elif typ == "Logo" %}
+						<li>
+							<div class="collapsible-header">{{ item }}. Logo</div>
+							<div class="collapsible-body">
+								<div class="container" style="min-width: 100%; padding-top: 5%;">
+									<input type="checkbox" name="AKTIV-Logo-{{ item }}" id="AKTIV-Logo-{{ item }}" {{ common.widgaktiv("Logo", item)|safe }}/>
+									<label for="AKTIV-Logo-{{ item }}">Logo aktiviert</label>
+									<input type="hidden" value="0" name="HIDDEN.AKTIV-Logo-{{ item }}">
+									<div class="row">
+										<div class="input-field col s12">
+											<input value="{{ common.getwidgetinfo("Logo", item, "URL") }}" name="URL-Logo-{{ item }}" id="URL-Logo-{{ item }}" type="text"/>
+											<label for="URL-Logo-{{ item }}">Logo-URL</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Logo", item, "height") }}' name="height-Logo-{{ item }}" id="height-Logo-{{ item }}" type="text"/>
+													<label for="height-Logo-{{ item }}">Logo-H&ouml;he</label>
+												</div>
+											</div>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Logo", item, "width") }}' name="width-Logo-{{ item }}" id="width-Logo-{{ item }}" type="text"/>
+													<label for="width-Logo-{{ item }}">Logo-Breite</label>
+												</div>
+											</div>
+										</div>
+										<div class="col s6">
+											<select name="valign-Logo-{{ item }}">{{ common.valign("Logo", item, "valign")|safe }}
+											</select>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Logo", item, "align") }}' name="align-Logo-{{ item }}" id="align-Logo-{{ item }}" type="text"/>
+													<label for="align-Logo-{{ item }}">Vertikaler Abstand</label>
+												</div>
+											</div>
+										</div>
+										<div class="col s6">
+											<select name="vmargin-Logo-{{ item }}">{{ common.valign("Logo", item, "vmargin")|safe }}
+											</select>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Logo", item, "margin") }}' name="margin-Logo-{{ item }}" id="margin-Logo-{{ item }}" type="text"/>
+													<label for="margin-Logo-{{ item }}">Horizontaler Abstand</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+		{% elif typ == "Freies_Widget" %}
+						<li>
+							<div class="collapsible-header">{{ item }}. Freies Widget</div>
+							<div class="collapsible-body">
+								<div class="container" style="min-width: 100%; padding-top: 5%;">
+									<input type="checkbox" name="AKTIV-Freies_Widget-{{ item }}" id="AKTIV-Freies_Widget-{{ item }}" {{ common.widgaktiv("Freies_Widget", item)|safe }}/>
+									<label for="AKTIV-Freies_Widget-{{ item }}">Widget aktiviert</label>
+									<input type="hidden" value="0" name="HIDDEN.AKTIV-Freies_Widget-{{ item }}">
+									<div class="row">
+										<div class="input-field col s12">
+											<textarea style="color:black;" name="URL-Freies_Widget-{{ item }}" id="URL-Freies_Widget-{{ item }}" class="materialize-textarea">{{ common.getwidgetinfo("Freies_Widget", item, "URL") }}</textarea>
+											<label for="URL-Freies_Widget-{{ item }}">Widget-URL</label>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Freies_Widget", item, "height") }}' name="height-Freies_Widget-{{ item }}" id="height-Freies_Widget-{{ item }}" type="text"/>
+													<label for="height-Freies_Widget-{{ item }}">Widget-H&ouml;he</label>
+												</div>
+											</div>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Freies_Widget", item, "width") }}' name="width-Freies_Widget-{{ item }}" id="width-Freies_Widget-{{ item }}" type="text"/>
+													<label for="width-Freies_Widget-{{ item }}">Widget-Breite</label>
+												</div>
+											</div>
+										</div>
+										<div class="col s6">
+											<select name="valign-Freies_Widget-{{ item }}">{{ common.valign("Freies_Widget", item, "valign")|safe }}
+											</select>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Freies_Widget", item, "align") }}' name="align-Freies_Widget-{{ item }}" id="align-Freies_Widget-{{ item }}" type="text"/>
+													<label for="align-Freies_Widget-{{ item }}">Vertikaler Abstand</label>
+												</div>
+											</div>
+										</div>
+										<div class="col s6">
+											<select name="vmargin-Freies_Widget-{{ item }}">{{ common.valign("Freies_Widget", item, "vmargin")|safe }}
+											</select>
+										</div>
+										<div class="col s6">
+											<div class="row">
+												<div class="input-field col s12">
+													<input value='{{ common.getwidgetinfo("Freies_Widget", item, "margin") }}' name="margin-Freies_Widget-{{ item }}" id="margin-Freies_Widget-{{ item }}" type="text"/>
+													<label for="margin-Freies_Widget-{{ item }}">Horizontaler Abstand</label>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+		{% endif %}
+		{% if typ != "Adminlink" %}
+								<center><a class="waves-effect waves-light btn" href="setn?referer=delwidget&delnum={{ item }}">Widget l&ouml;schen</a></center>
+		{% endif %}
+							</div>
+						</li>
+		{% endfor %}
+					</ul>
+					<button class="btn waves-effect waves-light" type="submit">Abschicken<i class="mdi-content-send right"></i></button>
+				</form>
+			</div>
+			<div class="col s6">
+				<form class="col s12" action="{{ url_for('admin_setn') }}" method="post">
+					<div class="card-panel">
+						<div class="row">
+							<input type="hidden" name="referer" value="newwidget" />
+							<div class="input-field col s12">
+								<select name="art">
+									<option value="" disabled selected>Widgetart w&auml;hlen</option>
+									<option value="Logo">Logo</option>
+									<option value="Freies_Widget">Freies Widget</option>
+								</select>
+								<label>Materialize Select</label>
+							</div>
+						</div>
+					</div>
+					<button class="btn waves-effect waves-light" type="submit">Widget hinzuf&uuml;gen.</button>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}
