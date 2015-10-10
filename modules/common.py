@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2015 Steffen Deusch
 # Licensed under the MIT license
-# Beilage zu MonitorNjus, 15.09.2015 (Version 0.9.3)
+# Beilage zu MonitorNjus, 10.10.2015 (Version 1.0)
 
 import os
 import os.path
@@ -11,15 +11,15 @@ import datetime
 import sqlite3
 
 datum = datetime.datetime.now()
-version = "0.9.4&beta;"
+version = "1.0&beta;"
 workingdir = os.path.dirname(os.path.realpath(__file__))
 dbpath = workingdir+'/../MonitorNjus.db'
 
 ############################## Settings ##############################
 
 debugv = 2				# Verbosity: 0,1,2 (0 = off, 1 = basic, 2 = mit Anmerkungen, 3 = Traceback, 707 = Easter Egg)
-triggerrefresh = False	# Client checks for updates every few seconds (may cause high cpu usage when the server is slow)
-authentication = False	# Settings inside auth.py
+triggerrefresh = False	# Only enable when running with production webserver! (not e.g. Flask dev server)
+#authentication = False	# Authentication settings in monitornjus.py!
 
 ######################### basics #########################
 
@@ -314,146 +314,7 @@ def getdate(value, Seite, Nummer):											# Splittet die Daten in der Datenba
 		return "Fehler"
 
 ######################### debug #########################
-
-def debug(e):
-	import os
-	import sys
-	import traceback
-	import cgi
-	scrname = os.environ["SCRIPT_NAME"]
-	trace = traceback.format_exc()
-
-	#####################################################
-
-	if "admin" in scrname:
-		css = "../bin/css/materialize.css"
-	elif "bin" and not "rollen" in scrname:
-		css = "css/materialize.css"
-	elif "rollen" in scrname:
-		css = "../../bin/css/materialize.css"
-	else:
-		css = ""
-
-	#####################################################
-
-	if (debugv == 2 or debugv == 707)\
-	and (("No such file or directory" and "subst_" in trace)\
-	or ("OperationalError" in trace)\
-	or ("Warning" in trace)):
-		anmerkung = True
-	else:
-		anmerkung = False
-
-	notauthenticated = False
-	if "nichts verloren" in trace:
-		notauthenticated = True
-
-	#####################################################
-
-	print("Content-Type: text/html;charset=utf-8\n")
-	
-	print(u"""\
-<!DOCTYPE html>
-<html lang="de">
-<head>
-	<meta charset="UTF-8">
-	<link href=\""""+css+"""\" type="text/css" rel="stylesheet" media="screen,projection"/>
-	<meta http-equiv="refresh" content="30">
-	<title>debug</title>
-	<!-- MonitorNjus -->
-	<!-- Copyright (c) """+unicode(datum.year)+""" Steffen Deusch -->
-	<!-- https://github.com/SteffenDE/MonitorNjus -->""")
-
-	#####################################################
-
-	if debugv == 707 and not anmerkung:
-		print(u"""
-	<style>
-	html, body {
-		height: 100%;
-		overflow: hidden;
-	}
-	body {
-		background-image: url("""+css+"""../resources/error.jpg);
-		background-size: auto 40%;
-		background-position: right bottom;
-		background-repeat: no-repeat;
-	}
-	</style>""")
-
-	#####################################################
-
-	print(u"""
-</head>
-<body>
-	<div class="container">""")
-
-	#####################################################
-
-	if debugv == 707 and not anmerkung:
-		print(u"""
-		<h3>Oh nein! :(</h3>
-		<h4>Ein hochqualifizierter Techniker arbeitet bereits mit Hochdruck an dem Problem!</h4>""")
-	else:
-		if not anmerkung:
-			print(u"""
-		<h3>Es ist ein Fehler aufgetreten!</h3>""")
-
-	#####################################################
-
-	if debugv >= 2:
-
-		#################################################
-
-		if anmerkung:
-			if "No such file or directory" in trace and "subst_" in trace:
-				print("<h4>Die Vertretungsdatei existiert nicht...</h4>")
-
-			elif "OperationalError" in trace:
-				print(u"""\
-	<center style="color: #ffffff; background: #a60c0d; border: 2px solid black; margin-top: 3%; padding-bottom: 3%;">
-		<h1>Hier stimmt was nicht!</h1>
-		Manuell an der Datenbank gespielt, was?
-	</center>""")
-
-			elif "Warning" in trace and not notauthenticated:
-				print(u"""
-		<h3>Warnung: """+unicode(e)+"""</h3>""")
-			elif notauthenticated:
-				print(u"""
-		<h3>"""+unicode(e)+"""</h3>
-		<meta http-equiv="refresh" content="5;url=../bin">\n""")
-
-		#################################################
-
-		if not notauthenticated:
-			print(u"""
-			<h5>Details:</h5>
-			<pre><code>""")
-			print(cgi.escape(trace))
-			print("		</code></pre>")
-
-	elif debugv == 1:
-		print(u"""
-		<h4>Details:<br><h5>""")
-		print(unicode(e))
-		print("	</h5></h4>")
-
-	else:
-		print(u"""Weitere Informationen über "debug" in common.py!</h3><br><br>""")
-
-	#####################################################
-
-	if not notauthenticated:
-		print(u"""
-		<small>Seite wird in 30 Sekunden neu geladen.</small><br>
-		<small>Script: """+scrname+"""</small><br>
-		<small>"""+datum.strftime("%d.%m.%Y %H:%M:%S")+"""</small>""")
-	print(u"""\
-	</div>
-</body>
-</html>""")
-	exit(1)
+# debug now in monitornjus.py
 
 if not os.path.exists(dbpath):
 	firstrun()

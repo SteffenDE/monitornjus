@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# MonitorNjus, 10.10.2015 (Version 1.0)
 
 from flask import Flask, url_for, redirect, render_template, g, request, Response, flash, make_response
 app = Flask(__name__)
