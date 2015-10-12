@@ -21,7 +21,7 @@ iis_virtual_path = "/monitornjus"
 if running_with_iis_virtual_path:
     from werkzeug.wsgi import DispatcherMiddleware
     iis_app = DispatcherMiddleware(app, {iis_virtual_path: app})
-    app.config["APPLICATION_ROOT"] = "/monitornjus"
+    app.config["APPLICATION_ROOT"] = iis_virtual_path
 
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
