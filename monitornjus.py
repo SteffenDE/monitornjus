@@ -14,6 +14,15 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+running_with_iis = False
+running_with_iis_virtual_path = False
+iis_virtual_path = "/monitornjus"
+
+if running_with_iis_virtual_path:
+    from werkzeug.wsgi import DispatcherMiddleware
+    iis_app = DispatcherMiddleware(app, {iis_virtual_path: app})
+    app.config["APPLICATION_ROOT"] = "/monitornjus"
+
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 app.secret_key = '\xf9ZNd2\xef\x89\xa8\xe1\x10\x95;\xd6\xdcl\xf3\xed\xfe\xbd\x88 ;\x08O'
@@ -188,7 +197,18 @@ def triggerrefresh():
 				time.sleep(3)
 			ttime += 3
 
-	return Response(events(), content_type='text/event-stream')
+	if running_with_iis:
+            reload(common)
+	    content = int(common.readsettings("REFRESH"))
+	    if int(content) == 1:
+                out = "data: reload\n\n"
+		time.sleep(4)
+		common.writesettings("REFRESH", "0")
+	    else:
+                out = "data: none\n\n"
+            return Response(out, content_type="text/event-stream")
+
+        return Response(events(), content_type='text/event-stream')
 
 adminnav = [('../admin/', "Haupteinstellungen"), ('../admin/widgets', "Widgets"), ('../bin/', "Frontend")]
 
