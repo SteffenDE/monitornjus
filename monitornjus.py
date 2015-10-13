@@ -32,7 +32,7 @@ if settings.running_with_iis == True:
 	app.config["APPLICATION_ROOT"] = settings.iis_virtual_path
 
 def raise_helper(msg):
-	raise Exception(msg)
+	raise eval(msg)
 
 ####### authentication #######
 
@@ -153,7 +153,7 @@ def binshow():
 
 	if linksgeteilt and rechtsgeteilt and timeL and timeR:
 		geteilt = True
-	return render_template('bin_show.html', common=common, geteilt=geteilt, linksgeteilt=linksgeteilt, rechtsgeteilt=rechtsgeteilt, timeR=timeR, timeL=timeL, teilung=teilung)
+	return render_template('bin_show.html', common=common, geteilt=geteilt, linksgeteilt=linksgeteilt, rechtsgeteilt=rechtsgeteilt, timeR=timeR, timeL=timeL, teilung=teilung, raise_helper=raise_helper)
 
 @app.route('/bin/contentset')
 def bin_contentset():
@@ -256,7 +256,7 @@ def comprollen():
 	url = request.args.get('url', None)
 	typ = request.args.get('type', None)
 	speed = request.args.get('speed', None)
-	return render_template('comprollen.html', url=url, typ=typ, speed=speed, common=common)
+	return render_template('comprollen.html', url=url, typ=typ, speed=speed, raise_helper=raise_helper)
 
 @app.route('/admin/')
 @requires_auth
