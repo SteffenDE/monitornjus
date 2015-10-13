@@ -9,35 +9,13 @@ import os
 import os.path
 from modules import common
 from functools import wraps
-from ConfigParser import SafeConfigParser
+import settings
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
-
-#### Settings ####
-
-running_with_iis = False # <- if running with iis
-iis_virtual_path = "/monitornjus" # <- if running under a virtual path
-
-auth_type = "ldap" # <- ldap or simple
-
-## if simple
-simple_auth_user = "johann"
-simple_auth_hashed_pw = 'ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f'
-##
-
-## if ldap 
-ldap_auth_type = "list" # list or group
-ldap_url = "ldap://10.1.1.1:389"
-ldap_domain = "musterschule.schule.paedml"
-#ldap_search_string = "CN=G_Lehrer_JVG,OU=Active Directory,OU=Sicherheitsgruppen,DC=musterschule,DC=schule,DC=paedml" # <- for group based auth
-ldap_user_list = ["greu", "rupp", "stol", "steffen.deusch"] # <- only for list auth
-##
-
-##################
 
 if common.readsettings("APPKEY") == "None":
 	import binascii
@@ -48,10 +26,10 @@ if common.readsettings("APPKEY") == "None":
 else:
 	app.secret_key = common.readsettings("APPKEY")
 
-if running_with_iis == True:
+if settings.running_with_iis == True:
 	from werkzeug.wsgi import DispatcherMiddleware
-	iis_app = DispatcherMiddleware(app, {iis_virtual_path: app})
-	app.config["APPLICATION_ROOT"] = iis_virtual_path
+	iis_app = DispatcherMiddleware(app, {settings.iis_virtual_path: app})
+	app.config["APPLICATION_ROOT"] = settings.iis_virtual_path
 
 def raise_helper(msg):
 	raise Exception(msg)
@@ -59,33 +37,33 @@ def raise_helper(msg):
 ####### authentication #######
 
 def check_auth(user, password):
-	if auth_type == "simple":
+	if settings.auth_type == "simple":
 		import hashlib
 		password = hashlib.sha512(password).hexdigest()
-		if user == simple_auth_user and password == simple_auth_hashed_pw:
+		if user == settings.simple_auth_user and password == settings.simple_auth_hashed_pw:
 			return True
 		else:
 			return False
 
-	elif auth_type == "ldap":
+	elif settings.auth_type == "ldap":
 		import ldap
 		authorized = False
 
-		l = ldap.initialize(ldap_url)
+		l = ldap.initialize(settings.ldap_url)
 		l.set_option(ldap.OPT_REFERRALS, 0)
 
 		try:
-			l.simple_bind_s(user+"@"+ldap_domain,password)
+			l.simple_bind_s(user+"@"+settings.ldap_domain,password)
 		except Exception as e:
 			if "invalid credentials" in str(e).lower():
 				return False
 			else:
 				raise Exception(e)
 
-		if ldap_auth_type == "list":
-			members = ldap_user_list
-		elif ldap_auth_type == "group":
-			dn, entry = l.search_s(ldap_search_string, ldap.SCOPE_BASE)[0]
+		if settings.ldap_auth_type == "list":
+			members = settings.ldap_user_list
+		elif settings.ldap_auth_type == "group":
+			dn, entry = l.search_s(settings.ldap_search_string, ldap.SCOPE_BASE)[0]
 			members = entry["member"]
 		else:
 			raise Exception("Wrong ldap_auth_type! need list or group")
@@ -107,10 +85,13 @@ def authenticate():
 def requires_auth(f):
 	@wraps(f)
 	def decorated(*args, **kwargs):
-		auth = request.authorization
-		if not auth or not check_auth(auth.username, auth.password):
-			return authenticate()
-		return f(*args, **kwargs)
+		if settings.auth_enabled:
+			auth = request.authorization
+			if not auth or not check_auth(auth.username, auth.password):
+				return authenticate()
+			return f(*args, **kwargs)
+		else:
+			return f(*args, **kwargs)
 	return decorated
 
 @app.errorhandler(400)
@@ -255,7 +236,7 @@ def triggerrefresh():
 				time.sleep(3)
 			ttime += 3
 
-	if running_with_iis:
+	if settings.running_with_iis:
 		reload(common)
 		content = int(common.readsettings("REFRESH"))
 		if int(content) == 1:
