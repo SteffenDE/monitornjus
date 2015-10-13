@@ -131,6 +131,7 @@ def firstrun():
 
 	writesettings("TEILUNG", "50", connt)
 	writesettings("REFRESH", "0", connt)
+	writesettings("APPKEY", "None")
 
 	newwidget(1, "Adminlink", "Adminlink", 1, "placeholder", "bottom", "0px", "center", "0px", "0", "0", connt)
 	newwidget(2, "Logo", "Logo", 0, "placeholder", "bottom", "0px", "left", "0px", "100%", "100%", connt)

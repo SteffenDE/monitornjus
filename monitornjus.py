@@ -9,48 +9,106 @@ import os
 import os.path
 from modules import common
 from functools import wraps
-import hashlib
+from ConfigParser import SafeConfigParser
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-running_with_iis = False
-running_with_iis_virtual_path = False
-iis_virtual_path = "/monitornjus"
-
-if running_with_iis_virtual_path:
-    from werkzeug.wsgi import DispatcherMiddleware
-    iis_app = DispatcherMiddleware(app, {iis_virtual_path: app})
-    app.config["APPLICATION_ROOT"] = iis_virtual_path
-
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
-app.secret_key = '\xf9ZNd2\xef\x89\xa8\xe1\x10\x95;\xd6\xdcl\xf3\xed\xfe\xbd\x88 ;\x08O'
+
+#### Settings ####
+
+running_with_iis = False # <- if running with iis
+iis_virtual_path = "/monitornjus" # <- if running under a virtual path
+
+auth_type = "ldap" # <- ldap or simple
+
+## if simple
+simple_auth_user = "johann"
+simple_auth_hashed_pw = 'ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f'
+##
+
+## if ldap 
+ldap_auth_type = "list" # list or group
+ldap_url = "ldap://10.1.1.1:389"
+ldap_domain = "musterschule.schule.paedml"
+#ldap_search_string = "CN=G_Lehrer_JVG,OU=Active Directory,OU=Sicherheitsgruppen,DC=musterschule,DC=schule,DC=paedml" # <- for group based auth
+ldap_user_list = ["greu", "rupp", "stol", "steffen.deusch"] # <- only for list auth
+##
+
+##################
+
+if common.readsettings("APPKEY") == "None":
+	import binascii
+	key = os.urandom(24)
+	hexkey = binascii.hexlify(os.urandom(32)).decode()
+	common.writesettings("APPKEY", hexkey)
+	app.secret_key = hexkey
+else:
+	app.secret_key = common.readsettings("APPKEY")
+
+if running_with_iis == True:
+	from werkzeug.wsgi import DispatcherMiddleware
+	iis_app = DispatcherMiddleware(app, {iis_virtual_path: app})
+	app.config["APPLICATION_ROOT"] = iis_virtual_path
 
 def raise_helper(msg):
-    raise Exception(msg)
+	raise Exception(msg)
 
 ####### authentication #######
 
-def check_auth(username, password):
-	"""This function is called to check if a username /
-	password combination is valid.
-	"""
-	if username == "johann" and password == "73eb768fe6a4c876aeb9fa99a5abf0d2f201d363db2f3b76d5ccc1ccb96caaa4e9e6fae73804fd0ae97041b4486765ad36619e256488c1ec0adab5e3a15219f2":
-		return True
-	else:
-		return False
+def check_auth(user, password):
+	if auth_type == "simple":
+		import hashlib
+		password = hashlib.sha512(password).hexdigest()
+		if user == simple_auth_user and password == simple_auth_hashed_pw:
+			return True
+		else:
+			return False
+
+	elif auth_type == "ldap":
+		import ldap
+		authorized = False
+
+		l = ldap.initialize(ldap_url)
+		l.set_option(ldap.OPT_REFERRALS, 0)
+
+		try:
+			l.simple_bind_s(user+"@"+ldap_domain,password)
+		except Exception as e:
+			if "invalid credentials" in str(e).lower():
+				return False
+			else:
+				raise Exception(e)
+
+		if ldap_auth_type == "list":
+			members = ldap_user_list
+		elif ldap_auth_type == "group":
+			dn, entry = l.search_s(ldap_search_string, ldap.SCOPE_BASE)[0]
+			members = entry["member"]
+		else:
+			raise Exception("Wrong ldap_auth_type! need list or group")
+
+
+		if user in str(members):
+			authorized = True
+		
+		if authorized:
+			return True
+		else:
+			return False
 
 def authenticate():
 	"""Sends a 401 response that enables basic auth"""
 	return Response(render_template('401.html'), 401,
-	{'WWW-Authenticate': 'Basic realm="Login Required"'})
+	{'WWW-Authenticate': 'Basic realm="MonitorNjus Admin-Panel"'})
 
 def requires_auth(f):
 	@wraps(f)
 	def decorated(*args, **kwargs):
 		auth = request.authorization
-		if not auth or not check_auth(auth.username, hashlib.sha512(auth.password).hexdigest()):
+		if not auth or not check_auth(auth.username, auth.password):
 			return authenticate()
 		return f(*args, **kwargs)
 	return decorated
@@ -198,17 +256,17 @@ def triggerrefresh():
 			ttime += 3
 
 	if running_with_iis:
-            reload(common)
-	    content = int(common.readsettings("REFRESH"))
-	    if int(content) == 1:
-                out = "data: reload\n\n"
+		reload(common)
+		content = int(common.readsettings("REFRESH"))
+		if int(content) == 1:
+			out = "data: reload\n\n"
 		time.sleep(4)
 		common.writesettings("REFRESH", "0")
-	    else:
-                out = "data: none\n\n"
-            return Response(out, content_type="text/event-stream")
+	else:
+		out = "data: none\n\n"
+		return Response(out, content_type="text/event-stream")
 
-        return Response(events(), content_type='text/event-stream')
+		return Response(events(), content_type='text/event-stream')
 
 adminnav = [('../admin/', "Haupteinstellungen"), ('../admin/widgets', "Widgets"), ('../bin/', "Frontend")]
 
