@@ -53,10 +53,14 @@ def check_auth(user, password):
 		l.set_option(ldap.OPT_REFERRALS, 0)
 
 		try:
-			l.simple_bind_s(user+"@"+settings.ldap_domain,password)
+			l.simple_bind_s(user+"@"+settings.ldap_domain,unicode(password, "ISO-8859-15"))
 		except Exception as e:
 			if "invalid credentials" in str(e).lower():
-				return False
+				try:
+					l.simple_bind_s(user+"@"+settings.ldap_domain,password)
+				except Exception as e:
+					if "invalid credentials" in str(e).lower():
+						return False
 			else:
 				raise Exception(e)
 
@@ -241,13 +245,13 @@ def triggerrefresh():
 		content = int(common.readsettings("REFRESH"))
 		if int(content) == 1:
 			out = "data: reload\n\n"
-		time.sleep(4)
-		common.writesettings("REFRESH", "0")
-	else:
-		out = "data: none\n\n"
-		return Response(out, content_type="text/event-stream")
-
-		return Response(events(), content_type='text/event-stream')
+			time.sleep(4)
+			common.writesettings("REFRESH", "0")
+		else:
+			out = "data: none\n\n"
+			return Response(out, content_type="text/event-stream")
+	
+	return Response(events(), content_type='text/event-stream')
 
 adminnav = [('../admin/', "Haupteinstellungen"), ('../admin/widgets', "Widgets"), ('../bin/', "Frontend")]
 
