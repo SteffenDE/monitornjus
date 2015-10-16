@@ -41,7 +41,7 @@ check_auth = auth.check_auth
 
 def authenticate():
 	"""Sends a 401 response that enables basic auth"""
-	return Response(render_template('401.html'), 401,
+	return Response(render_template('/error/401.html'), 401,
 	{'WWW-Authenticate': 'Basic realm="MonitorNjus Admin-Panel"'})
 
 def requires_auth(f):
