@@ -12,7 +12,7 @@
 	<!-- MonitorNjus -->
 	<!-- Copyright (c) Steffen Deusch -->
 	<!-- https://github.com/SteffenDE/MonitorNjus -->
-	<script src="../js/jquery-2.1.4.min.js"></script>
+	<script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
 	<script type="text/javascript">
 	function resizeIframe(obj) {
 		obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
@@ -130,5 +130,5 @@
 </body>
 </html>
 {% else %}
-{{ common.raise_helper("Warning('Falscher oder fehlernder Queryparameter: type')") }}
+{{ raise_helper("Warning('Falscher oder fehlernder Queryparameter: type')") }}
 {% endif %}

@@ -17,9 +17,7 @@ dbpath = workingdir+'/../MonitorNjus.db'
 
 ############################## Settings ##############################
 
-debugv = 2				# Verbosity: 0,1,2 (0 = off, 1 = basic, 2 = mit Anmerkungen, 3 = Traceback, 707 = Easter Egg)
 triggerrefresh = True	# Only enable when running with production webserver! (not e.g. Flask dev server)
-#authentication = False	# Authentication settings in monitornjus.py!
 
 ######################### basics #########################
 
@@ -316,9 +314,6 @@ def getdate(value, Seite, Nummer):											# Splittet die Daten in der Datenba
 		return timespan[3]
 	else:
 		return "Fehler"
-
-######################### debug #########################
-# debug now in monitornjus.py
 
 if not os.path.exists(dbpath):
 	firstrun()

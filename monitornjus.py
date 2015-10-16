@@ -36,50 +36,8 @@ def raise_helper(msg):
 
 ####### authentication #######
 
-def check_auth(user, password):
-	if settings.auth_type == "simple":
-		import hashlib
-		password = hashlib.sha512(password).hexdigest()
-		if user == settings.simple_auth_user and password == settings.simple_auth_hashed_pw:
-			return True
-		else:
-			return False
-
-	elif settings.auth_type == "ldap":
-		import ldap
-		authorized = False
-
-		l = ldap.initialize(settings.ldap_url)
-		l.set_option(ldap.OPT_REFERRALS, 0)
-
-		try:
-			l.simple_bind_s(user+"@"+settings.ldap_domain,unicode(password, "ISO-8859-15"))
-		except Exception as e:
-			if "invalid credentials" in str(e).lower():
-				try:
-					l.simple_bind_s(user+"@"+settings.ldap_domain,password)
-				except Exception as e:
-					if "invalid credentials" in str(e).lower():
-						return False
-			else:
-				raise Exception(e)
-
-		if settings.ldap_auth_type == "list":
-			members = settings.ldap_user_list
-		elif settings.ldap_auth_type == "group":
-			dn, entry = l.search_s(settings.ldap_search_string, ldap.SCOPE_BASE)[0]
-			members = entry["member"]
-		else:
-			raise Exception("Wrong ldap_auth_type! need list or group")
-
-
-		if user in str(members):
-			authorized = True
-		
-		if authorized:
-			return True
-		else:
-			return False
+from modules import auth
+check_auth = auth.check_auth
 
 def authenticate():
 	"""Sends a 401 response that enables basic auth"""
@@ -100,28 +58,28 @@ def requires_auth(f):
 
 @app.errorhandler(400)
 def bad_request(error):
-	return render_template('400.html'), 400
+	return render_template('error/400.html'), 400
 
 @app.errorhandler(401)
 def authorization_required(error):
-	return render_template('401.html'), 401
+	return render_template('error/401.html'), 401
 
 @app.errorhandler(403)
 def access_denied(error):
-	return render_template('403.html'), 403
+	return render_template('error/403.html'), 403
 
 @app.errorhandler(404)
 def not_found(error):
 	flash(request.path)
-	return render_template('404.html'), 404
+	return render_template('error/404.html'), 404
 
 @app.errorhandler(500)
 def internal_server_error(error):
 	import traceback
 	if "Warning" in traceback.format_exc():
-		return render_template('userwarning.html', error=error), 200
+		return render_template('error/userwarning.html', error=error), 200
 	else:
-		return render_template('500.html', error="\n"+traceback.format_exc().rstrip()), 500
+		return render_template('error/500.html', error="\n"+traceback.format_exc().rstrip()), 500
 
 @app.route('/')
 def index():
@@ -130,7 +88,7 @@ def index():
 @app.route('/bin/')
 def binindex():
 	reload(common)
-	return render_template('bin_index.html', common=common)
+	return render_template('frontend/index.html', common=common)
 
 @app.route('/bin/show')
 def binshow():
@@ -157,7 +115,7 @@ def binshow():
 
 	if linksgeteilt and rechtsgeteilt and timeL and timeR:
 		geteilt = True
-	return render_template('bin_show.html', common=common, geteilt=geteilt, linksgeteilt=linksgeteilt, rechtsgeteilt=rechtsgeteilt, timeR=timeR, timeL=timeL, teilung=teilung, raise_helper=raise_helper)
+	return render_template('frontend/show.html', common=common, geteilt=geteilt, linksgeteilt=linksgeteilt, rechtsgeteilt=rechtsgeteilt, timeR=timeR, timeL=timeL, teilung=teilung, raise_helper=raise_helper)
 
 @app.route('/bin/contentset')
 def bin_contentset():
@@ -219,7 +177,7 @@ def bin_contentset():
 	else:
 		refreshon = False
 	typ = common.checkfiletype(url)
-	return render_template('bin_contentset.html', common=common, getytid=getytid, nummer=nummer, nextnummer=nextnummer, refreshon=refreshon, refresh=refresh, seite=seite, mseite=mseite, typ=typ, url=url)
+	return render_template('frontend/contentset.html', common=common, getytid=getytid, nummer=nummer, nextnummer=nextnummer, refreshon=refreshon, refresh=refresh, seite=seite, mseite=mseite, typ=typ, url=url)
 
 @app.route('/bin/triggerrefresh')
 def triggerrefresh():
@@ -255,12 +213,12 @@ def triggerrefresh():
 
 adminnav = [('../admin/', "Haupteinstellungen"), ('../admin/widgets', "Widgets"), ('../bin/', "Frontend")]
 
-@app.route('/bin/rollen/comprollen')
+@app.route('/bin/comprollen')
 def comprollen():
 	url = request.args.get('url', None)
 	typ = request.args.get('type', None)
 	speed = request.args.get('speed', None)
-	return render_template('comprollen.html', url=url, typ=typ, speed=speed, raise_helper=raise_helper)
+	return render_template('frontend/comprollen.html', url=url, typ=typ, speed=speed, raise_helper=raise_helper)
 
 @app.route('/admin/')
 @requires_auth
@@ -268,7 +226,7 @@ def admin_index():
 	reload(common)
 	from modules import colors
 	reload(colors)
-	return render_template('admin_index.html', common=common, colors=colors, navigation=adminnav)
+	return render_template('admin/index.html', common=common, colors=colors, navigation=adminnav)
 
 @app.route('/admin/widgets')
 @requires_auth
@@ -276,7 +234,7 @@ def admin_widgets():
 	reload(common)
 	from modules import colors
 	reload(colors)
-	return render_template('admin_widgets.html', common=common, colors=colors, navigation=adminnav)
+	return render_template('admin/widgets.html', common=common, colors=colors, navigation=adminnav)
 
 @app.route('/admin/setn', methods=["GET", "POST"])
 @requires_auth
@@ -475,7 +433,7 @@ def admin_setn():
 
 	common.writesettings("REFRESH", "1")
 
-	return render_template('admin_setn.html', refresh=refresh)
+	return render_template('admin/setn.html', refresh=refresh)
 
 if __name__ == '__main__':
 	app.run(host="0.0.0.0")

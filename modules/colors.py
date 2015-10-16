@@ -7,7 +7,7 @@
 
 import random                       # Random Modul importieren
 
-rancolor = ['red','indigo','blue','light-blue','cyan','teal','green','light-green','lime','amber','orange','deep-orange','grey','blue-grey']
+rancolor = ['red','indigo','blue','light-blue','cyan','teal','green','light-green','amber','orange','deep-orange','blue-grey']
 color = random.choice(rancolor)     # Zufallsauswahl der Darbe
 
 if color == "red":                  # Umwandlung des Farbnamens in Hexadezimal
@@ -26,22 +26,22 @@ elif color == "green":
 	hexa = "#4caf50"
 elif color == "light-green":
 	hexa = "#8bc34a"
-elif color == "lime":
-	hexa = "#cddc39"
+# elif color == "lime":
+# 	hexa = "#cddc39"
 elif color == "amber":
 	hexa = "#ffc107"
 elif color == "orange":
 	hexa = "#ff9800"
 elif color == "deep-orange":
 	hexa = "#ff5722"
-elif color == "grey":
-	hexa = "#9e9e9e"
+# elif color == "grey":
+# 	hexa = "#9e9e9e"
 elif color == "blue-grey":
 	hexa = "#607d8b"
 else: 
 	hexa == "wtf"
 
-adminstyles = """\
+adminstyles = """
 	<style type="text/css">
 
 		.input-field label { 
