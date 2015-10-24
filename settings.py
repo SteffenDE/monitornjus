@@ -2,6 +2,8 @@
 
 #### Settings ####
 
+triggerrefresh = False				# <- only enable when NOT running with only 1 handler, e.g. the dev server
+
 running_with_iis = False 			# <- if running with iis
 iis_virtual_path = "/monitornjus" 	# <- if running under a "virtual path"
 

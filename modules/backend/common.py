@@ -15,10 +15,6 @@ version = "1.0.1&beta;"
 workingdir = os.path.dirname(os.path.realpath(__file__))
 dbpath = workingdir+'/../MonitorNjus.db'
 
-############################## Settings ##############################
-
-triggerrefresh = True	# Only enable when running with production webserver! (not e.g. Flask dev server)
-
 ######################### basics #########################
 
 def raise_helper(message):
@@ -130,6 +126,7 @@ def firstrun():
 	writesettings("TEILUNG", "50", connt)
 	writesettings("REFRESH", "0", connt)
 	writesettings("APPKEY", "None")
+	writesettings("triggerrefresh", "False")
 
 	newwidget(1, "Adminlink", "Adminlink", 1, "placeholder", "bottom", "0px", "center", "0px", "0", "0", connt)
 	newwidget(2, "Logo", "Logo", 0, "placeholder", "bottom", "0px", "left", "0px", "100%", "100%", connt)

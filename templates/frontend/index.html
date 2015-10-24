@@ -48,7 +48,7 @@
 	</div>
 		{% endif %}
 	{% endfor %}
-	{% if common.triggerrefresh %}
+	{% if settings.triggerrefresh %}
 	<script>
 	setTimeout(function() {
 		if(typeof(EventSource) !== "undefined") {
