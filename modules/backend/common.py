@@ -11,7 +11,7 @@ import datetime
 import sqlite3
 
 datum = datetime.datetime.now()
-version = "1.0.1&beta;"
+version = "1.0.2&beta;"
 workingdir = os.path.dirname(os.path.realpath(__file__))
 dbpath = workingdir+'/../MonitorNjus.db'
 
