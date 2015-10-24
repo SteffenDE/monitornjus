@@ -154,7 +154,7 @@ def admin_index():
 	reload(common)
 	from modules.backend import colors
 	reload(colors)
-	return render_template('admin/index.html', common=common, colors=colors, navigation=adminnav)
+	return render_template('admin/index.html', common=common, settings=settings, colors=colors, navigation=adminnav)
 
 @app.route('/admin/widgets')
 @requires_auth
