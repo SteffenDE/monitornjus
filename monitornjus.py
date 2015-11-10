@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# MonitorNjus, 24.10.2015 (Version 1.0.2)
+# MonitorNjus, 10.11.2015 (Version 1.0.3)
 
 from flask import Flask, url_for, redirect, render_template, g, request, Response, flash, make_response
 app = Flask(__name__)
@@ -141,7 +141,7 @@ def triggerrefresh():
 					ttime += 3
 				except:
 					app.logger.warning('client disconnected, breaking')
-					os.kill()
+					break
 
 		if settings.running_with_iis:
 			reload(common)
