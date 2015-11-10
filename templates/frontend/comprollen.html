@@ -57,15 +57,15 @@
 				/*var framefenster_size = framefenster[i].contentWindow.document.body.offsetHeight;*/
 				framefenster[i].style.height = framefenster_size + 'px';
 				var height = window.innerHeight;
-				/*console.log("Framehöhe: "+framefenster_size)
-				console.log("Fensterhöhe: "+height)*/
+				//console.log("Framehöhe: "+framefenster_size)
+				//console.log("Fensterhöhe: "+height)
 				if(framefenster_size <= height)
 					{
 					framefenster[i].style.visibility = "visible"
 					clearInterval(auto_resize_timer);
 					}
 				else {
-					window.location.href = "comprollen?type=rollen&url={{ url }}";
+					window.location.href = "comprollen?type=rollen&url={{ url }}&height="+framefenster_size;
 				}
 				}
 			}
@@ -105,15 +105,18 @@
 	@-o-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 	@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 	</style>
-	<script type="text/javascript">
-	function resizeIframe(obj) {
-		obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
-	}
-	</script>
+	<script src="{{ url_for('static', filename='js/jquery-2.1.4.min.js') }}"></script>
 </head>
 <body class="fadeIn fadeIn-animation">
 	<script type="text/javascript">
-	var frame = '<iframe src="{{ url }}" style="width:100%; height:100%;" frameborder="0" name="links" scrolling="no" onload="javascript:resizeIframe(this);"></iframe>'
+	{% if height == None %}
+	function resizeIframe(obj) {
+		obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+	}
+	{% endif %}
+	// var height = window.innerHeight;
+	// console.log(height);
+	var frame = '<iframe src="{{ url }}" style="width:100%; height:{{ "100%" if height == None else height ~ "px" }};" frameborder="0" name="links" scrolling="no" {% if height == None %}onload="javascript:resizeIframe(this);"{% endif %}></iframe>'
 	var strDir      ='{{ direction }}';
 	var Interval = {{ speed }};
 	var intRepeat   = 2;

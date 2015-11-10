@@ -17,6 +17,13 @@ sys.setdefaultencoding('utf8')
 app.jinja_env.trim_blocks = True
 app.jinja_env.lstrip_blocks = True
 
+import logging
+from logging.handlers import RotatingFileHandler
+file_handler = RotatingFileHandler('monitornjus.log', maxBytes=10000, backupCount=1)
+formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+file_handler.setFormatter(formatter)
+app.logger.addHandler(file_handler)
+
 if common.readsettings("APPKEY") == "None":
 	import binascii
 	key = os.urandom(24)
@@ -58,23 +65,28 @@ def requires_auth(f):
 
 @app.errorhandler(400)
 def bad_request(error):
+	app.logger.error(error)
 	return render_template('error/400.html'), 400
 
 @app.errorhandler(401)
 def authorization_required(error):
+	app.logger.error(error)
 	return render_template('error/401.html'), 401
 
 @app.errorhandler(403)
 def access_denied(error):
+	app.logger.error(error)
 	return render_template('error/403.html'), 403
 
 @app.errorhandler(404)
 def not_found(error):
+	app.logger.error(error)
 	flash(request.path)
 	return render_template('error/404.html'), 404
 
 @app.errorhandler(500)
 def internal_server_error(error):
+	app.logger.error(error)
 	import traceback
 	if "Warning" in traceback.format_exc():
 		return render_template('error/userwarning.html', error=error), 200
@@ -113,18 +125,23 @@ def triggerrefresh():
 		def events():
 			ttime = 0
 			while True:
-				reload(common)
-				content = int(common.readsettings("REFRESH"))
-				if int(content) == 1:
-					yield "data: reload\n\n"
-					time.sleep(4)
-					common.writesettings("REFRESH", "0")
-					break
-				elif ttime >= 3600:
-					break
-				else:
-					time.sleep(3)
-				ttime += 3
+				try:	
+					reload(common)
+					content = int(common.readsettings("REFRESH"))
+					if int(content) == 1:
+						yield "data: reload\n\n"
+						time.sleep(4)
+						common.writesettings("REFRESH", "0")
+						break
+					elif ttime >= 3600:
+						break
+					else:
+						yield "data: none\n\n"
+						time.sleep(3)
+					ttime += 3
+				except:
+					app.logger.warning('client disconnected, breaking')
+					os.kill()
 
 		if settings.running_with_iis:
 			reload(common)
@@ -136,8 +153,11 @@ def triggerrefresh():
 			else:
 				out = "data: none\n\n"
 			return Response(out, content_type="text/event-stream")
-		
-		return Response(events(), content_type='text/event-stream')
+			
+		else:
+			return Response(events(), content_type='text/event-stream')
+	else:
+		return render_template('error/400.html'), 400
 
 adminnav = [('../admin/', "Haupteinstellungen"), ('../admin/widgets', "Widgets"), ('../bin/', "Frontend")]
 
@@ -146,7 +166,8 @@ def comprollen():
 	url = request.args.get('url', None)
 	typ = request.args.get('type', None)
 	speed = request.args.get('speed', None)
-	return render_template('frontend/comprollen.html', url=url, typ=typ, speed=speed, raise_helper=raise_helper)
+	height = request.args.get('height', None)
+	return render_template('frontend/comprollen.html', url=url, typ=typ, speed=speed, height=height, raise_helper=raise_helper)
 
 @app.route('/admin/')
 @requires_auth
