@@ -99,8 +99,9 @@ def index():
 
 @app.route('/bin/')
 def binindex():
+	trigger = request.args.get("disabletrigger")
 	reload(common)
-	return render_template('frontend/index.html', common=common, settings=settings)
+	return render_template('frontend/index.html', common=common, settings=settings, trigger=trigger)
 
 @app.route('/bin/show')
 def binshow():

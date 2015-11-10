@@ -12,7 +12,7 @@
 	<!-- https://github.com/SteffenDE/MonitorNjus -->
 </head>
 <body>
-	<iframe src="show" style="z-index: -1000; position:absolute; height:100%; width:100%; top: 0px; right:0px;" frameborder="0"></iframe>
+	<iframe src="show" style="z-index: -1000; position:absolute; height:100%; width:100%; top: 0px; right:0px; border-style:none; overflow:hidden;" scrolling="no" frameborder="0"></iframe>
 	{% for item in common.getwidgets() %}
 		{% set typ = common.getwidgTYPfromID(item) %}
 		{% if typ == "Logo" and common.getwidgetinfo("Logo", item, "AKTIV") %}
@@ -48,7 +48,7 @@
 	</div>
 		{% endif %}
 	{% endfor %}
-	{% if settings.triggerrefresh %}
+	{% if settings.triggerrefresh and trigger|int != 1 %}
 	<script>
 	setTimeout(function() {
 		if(typeof(EventSource) !== "undefined") {
