@@ -12,7 +12,7 @@
 	<!-- https://github.com/SteffenDE/MonitorNjus -->
 </head>
 <body>
-	<iframe src="show" style="z-index: -1000; position:absolute; height:100%; width:100%; top: 0px; right:0px; border-style:none; overflow:hidden" scrolling="no"></iframe>
+	<iframe src="show" style="z-index: -1000; position:absolute; height:100%; width:100%; top: 0px; right:0px;" frameborder="0"></iframe>
 	{% for item in common.getwidgets() %}
 		{% set typ = common.getwidgTYPfromID(item) %}
 		{% if typ == "Logo" and common.getwidgetinfo("Logo", item, "AKTIV") %}
@@ -34,7 +34,7 @@
 			{% set widgetalign = common.addpx(common.getwidgetinfo("Freies_Widget", item, "align")) %}
 			{% set widgetvmargin = common.getwidgetinfo("Freies_Widget", item, "vmargin") %}
 			{% set widgetmargin = common.addpx(common.getwidgetinfo("Freies_Widget", item, "margin"))  %}
-	<div id="widget" style="z-index: -10; height:{{ widgetheight }}; width:{{ widgetwidth }}; {{ widgetvalign }}:{{ widgetalign }}; {{ widgetvmargin ~ ':' ~ widgetmargin if widgetvmargin != 'center' else 'position:absolute; left:0; right:0; margin-left:auto; margin-right:auto;' }};">
+	<div id="widget" style="z-index: -10; height:{{ widgetheight }}; width:{{ widgetwidth }}; {{ widgetvalign }}:{{ widgetalign }}; {{ widgetvmargin ~ ':' ~ widgetmargin if widgetvmargin != 'center' else 'position:absolute; left:0; right:0; margin-left:auto; margin-right:auto;' }}">
 		{{ widgetcontent|safe }}
 	</div>
 		{% elif typ == "Adminlink" and common.getwidgetinfo("Adminlink", item, "AKTIV") %}
