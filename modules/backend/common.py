@@ -11,7 +11,7 @@ import datetime
 import sqlite3
 
 datum = datetime.datetime.now()
-version = "1.0.2&beta;"
+version = "1.0.3&beta;"
 workingdir = os.path.dirname(os.path.realpath(__file__))
 dbpath = workingdir+'/../MonitorNjus.db'
 
@@ -64,8 +64,8 @@ def getrows():
 def getallrows():
 	cursor = conn.execute("SELECT NUMMER FROM DISPLAYSETS WHERE SEITE=\"Links\";");
 	val = unicode(cursor.fetchall())
-	liste = " ".join(val)
-	return liste
+	liste = val
+	return eval(str(liste).replace("(", "").replace(",)", ""))
 
 ######################### firstrun #########################
 

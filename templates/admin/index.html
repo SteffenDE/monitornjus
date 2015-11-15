@@ -10,7 +10,7 @@
 				<input type="hidden" name="referer" value="index" />
 				<div class="row">
 		{% for item in range(0,rows+1) %}
-			{% if item|string in common.getallrows() %}
+			{% if item in common.getallrows() %}
 					<div class="col s12">
 						<h5 class="header center {{ colors.color }}-text">Displayset {{ item }}</h5>
 						<div class="row">
