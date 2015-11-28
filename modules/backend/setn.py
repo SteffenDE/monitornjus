@@ -3,9 +3,9 @@
 #
 # Copyright (c) 2015 Steffen Deusch
 # Licensed under the MIT license
-# Beilage zu MonitorNjus, 24.10.2015 (Version 1.0.2)
+# MonitorNjus, 28.11.2015 (Version 1.1)
 
-from ..backend import common
+from ..code import common
 reload(common)
 from flask import url_for
 

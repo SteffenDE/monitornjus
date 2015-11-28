@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: UTF-8 -*-
+#
+# Copyright (c) 2015 Steffen Deusch
+# Licensed under the MIT license
 # MonitorNjus, 28.11.2015 (Version 1.1)
 # Frontend View
 

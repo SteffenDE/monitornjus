@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+#
+# Copyright (c) 2015 Steffen Deusch
+# Licensed under the MIT license
+# MonitorNjus, 28.11.2015 (Version 1.1)
+
 import settings
 
 def check_auth(user, password):

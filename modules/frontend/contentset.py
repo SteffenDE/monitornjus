@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2015 Steffen Deusch
 # Licensed under the MIT license
-# Beilage zu MonitorNjus, 24.10.2015 (Version 1.0.2)
+# MonitorNjus, 28.11.2015 (Version 1.1)
 
 from ..code import checktime
 from ..code import getytid

@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2015 Steffen Deusch
 # Licensed under the MIT license
-# Beilage zu MonitorNjus, 07.05.2015 (Version 0.7.1)
+# MonitorNjus, 28.11.2015 (Version 1.1)
 
 import random                       # Random Modul importieren
 

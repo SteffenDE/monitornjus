@@ -1,4 +1,7 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# MonitorNjus, 28.11.2015 (Version 1.1)
+# Settings
 
 #### Settings ####
 
