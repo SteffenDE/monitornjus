@@ -10,6 +10,7 @@ from flask import url_for, render_template, request, Response, flash, make_respo
 from modules.code import common
 import settings
 from tools import raise_helper
+from app import app
 
 frontend = Blueprint('frontend', __name__, template_folder='templates')
 
