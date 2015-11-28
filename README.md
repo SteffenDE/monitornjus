@@ -18,5 +18,6 @@ Was wird benötigt?
 * Flask, Jinja2
 * WSGI fähiger Webserver
 
-#### common.py
-In der Datei "common.py" werden im Abschnitt "Settings" mögliche Einstellungen vorgenommen.
+#### Einstellungen
+In der Datei "settings.py" werden mögliche Einstellungen vorgenommen.<br>
+Sollte man einen Apache mit mod_wsgi einsetzen, dann muss man den Pfad in der Datei "apache.wsgi" verändern.
