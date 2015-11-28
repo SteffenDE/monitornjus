@@ -16,6 +16,7 @@ backend = Blueprint('backend', __name__, template_folder='templates')
 adminnav = [('../admin/', "Haupteinstellungen"), ('../admin/widgets', "Widgets"), ('../', "Frontend")]
 
 @backend.route('/admin/')
+@requires_auth
 def admin_index():
 	reload(common)
 	from modules.code import colors
