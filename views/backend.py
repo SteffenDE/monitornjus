@@ -33,7 +33,7 @@ def admin_widgets():
 @backend.route('/admin/setn', methods=["GET", "POST"])
 @requires_auth
 def admin_setn():
-	from modules.admin import setn
+	from modules.backend import setn
 
 	form1 = request.form
 	form2 = request.args
