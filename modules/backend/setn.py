@@ -104,7 +104,7 @@ def setn(form):
 	referer = form.get('referer')
 
 	if "index" in referer:
-		refresh = url_for('admin_index')
+		refresh = url_for('backend.admin_index')
 
 		for item in form:
 			if not "teilung" in item and not "referer" in item:
@@ -130,7 +130,7 @@ def setn(form):
 				updateteilung(referer, form)
 
 	elif "widgets" in referer:
-		refresh = url_for('admin_widgets')
+		refresh = url_for('backend.admin_widgets')
 
 		for item in form:
 			if not "referer" in item:
@@ -154,7 +154,7 @@ def setn(form):
 						updateaktiv(item, art, "", ID, typ, hidden, referer)
 
 	elif "row" in referer:
-		refresh = url_for('admin_index')
+		refresh = url_for('backend.admin_index')
 		cnum = unicode(form.get("createnum"))
 		dnum = unicode(form.get("delnum"))
 		if cnum is not None and cnum.isdigit():
@@ -171,7 +171,7 @@ def setn(form):
 				raise Warning("Displayset löschen - falsche Zahl: "+unicode(num))
 
 	elif "newwidget" in referer:
-		refresh = url_for('admin_widgets')
+		refresh = url_for('backend.admin_widgets')
 		if form.get("art") is not None:
 			val = unicode(form.get("art"))
 		else:
@@ -185,13 +185,13 @@ def setn(form):
 				raise Warning("Falsches Widget: "+val)
 
 	elif "delwidget" in referer:
-		refresh = url_for('admin_widgets')
+		refresh = url_for('backend.admin_widgets')
 		num = form.get("delnum")
 		if num is not None:
 			common.removewidget(unicode(num))
 
 	elif "triggerrefresh" in referer:
-		refresh = url_for('admin_index')
+		refresh = url_for('backend.admin_index')
 
 	common.writesettings("REFRESH", "1")
 

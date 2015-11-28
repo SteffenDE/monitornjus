@@ -1,4 +1,4 @@
-{% extends 'admin/base.html' %}
+{% extends 'backend/base.html' %}
 {% set sitename = 'haupteinstellungen' %}
 {% set rows = common.getrows() %}
 {% set rowsone = rows + 1 %}
@@ -6,7 +6,7 @@
 	<h3 class="header center {{ colors.color }}-text">Haupteinstellungen</h3>
 	<div class="container">
 		<div class="row">
-			<form class="col s12" action="{{ url_for('admin_setn') }}" method="post">
+			<form class="col s12" action="{{ url_for('backend.admin_setn') }}" method="post">
 				<input type="hidden" name="referer" value="index" />
 				<div class="row">
 		{% for item in range(0,rows+1) %}

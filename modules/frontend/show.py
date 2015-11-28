@@ -5,8 +5,8 @@
 # Licensed under the MIT license
 # Beilage zu MonitorNjus, 24.10.2015 (Version 1.0.2)
 
-from ..backend import checktime
-from ..backend import common
+from ..code import checktime
+from ..code import common
 reload(common)
 import sys
 reload(sys)

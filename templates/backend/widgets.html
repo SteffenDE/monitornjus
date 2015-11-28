@@ -1,11 +1,11 @@
-{% extends 'admin/base.html' %}
+{% extends 'backend/base.html' %}
 {% set sitename = 'widgets' %}
 {% block content %}
 	<h3 class="header center {{ colors.color }}-text">Widgets</h3>
 	<div class="container">
 		<div class="row">
 			<div class="col s6">
-				<form class="col s12" action="{{ url_for('admin_setn') }}" method="post">
+				<form class="col s12" action="{{ url_for('backend.admin_setn') }}" method="post">
 					<input type="hidden" name="referer" value="widgets" />
 					<ul class="collapsible" data-collapsible="accordion">
 {% set count = common.getwidgets() %}
@@ -162,7 +162,7 @@
 								</div>
 		{% endif %}
 		{% if typ != "Adminlink" %}
-								<center><a class="waves-effect waves-light btn" href="setn?referer=delwidget&delnum={{ item }}">Widget l&ouml;schen</a></center>
+								<center><a class="waves-effect waves-light btn" href="{{ url_for('backend.admin_setn') }}?referer=delwidget&delnum={{ item }}">Widget l&ouml;schen</a></center>
 		{% endif %}
 							</div>
 						</li>
@@ -172,7 +172,7 @@
 				</form>
 			</div>
 			<div class="col s6">
-				<form class="col s12" action="{{ url_for('admin_setn') }}" method="post">
+				<form class="col s12" action="{{ url_for('backend.admin_setn') }}" method="post">
 					<div class="card-panel">
 						<div class="row">
 							<input type="hidden" name="referer" value="newwidget" />
