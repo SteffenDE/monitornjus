@@ -12,7 +12,7 @@
 	<!-- https://github.com/SteffenDE/MonitorNjus -->
 </head>
 <body>
-	<iframe src="show" style="z-index: -1000; position:absolute; height:100%; width:100%; top: 0px; right:0px; border-style:none; overflow:hidden;" scrolling="no" frameborder="0"></iframe>
+	<iframe src="show" style="z-index: 1; position:absolute; height:100%; width:100%; top: 0px; right:0px;" frameborder="0" scrolling="no"></iframe>
 	{% for item in common.getwidgets() %}
 		{% set typ = common.getwidgTYPfromID(item) %}
 		{% if typ == "Logo" and common.getwidgetinfo("Logo", item, "AKTIV") %}
@@ -23,7 +23,7 @@
 			{% set logolink = common.getwidgetinfo("Logo", item, "URL") %}
 			{% set logowidth = common.addpx(common.getwidgetinfo("Logo", item, "width")) %}
 			{% set logoheight = common.addpx(common.getwidgetinfo("Logo", item, "height")) %}
-	<div id="logo" style="{{ logovalign }}:{{ logoalign }};">
+	<div id="logo" style="z-index: 2; {{ logovalign }}:{{ logoalign }};">
 		<img align="{{ logovmargin }}" style="{{ 'margin-' ~ logovmargin ~ ':' ~ logomargin }};" width="{{ logowidth }}" height="{{ logoheight }}" src="{{ logolink }}">
 	</div>
 		{% elif typ == "Freies_Widget" and common.getwidgetinfo("Freies_Widget", item, "AKTIV") %}
@@ -34,7 +34,7 @@
 			{% set widgetalign = common.addpx(common.getwidgetinfo("Freies_Widget", item, "align")) %}
 			{% set widgetvmargin = common.getwidgetinfo("Freies_Widget", item, "vmargin") %}
 			{% set widgetmargin = common.addpx(common.getwidgetinfo("Freies_Widget", item, "margin"))  %}
-	<div id="widget" style="z-index: -10; height:{{ widgetheight }}; width:{{ widgetwidth }}; {{ widgetvalign }}:{{ widgetalign }}; {{ widgetvmargin ~ ':' ~ widgetmargin if widgetvmargin != 'center' else 'position:absolute; left:0; right:0; margin-left:auto; margin-right:auto;' }}">
+	<div id="widget" style="z-index: 2; height:{{ widgetheight }}; width:{{ widgetwidth }}; {{ widgetvalign }}:{{ widgetalign }}; {{ widgetvmargin ~ ':' ~ widgetmargin if widgetvmargin != 'center' else 'position:absolute; left:0; right:0; margin-left:auto; margin-right:auto;' }}">
 		{{ widgetcontent|safe }}
 	</div>
 		{% elif typ == "Adminlink" and common.getwidgetinfo("Adminlink", item, "AKTIV") %}
@@ -42,7 +42,7 @@
 			{% set adminlinkmargin = common.addpx(common.getwidgetinfo("Adminlink", item, "margin")) %}
 			{% set adminlinkvalign = common.getwidgetinfo("Adminlink", item, "valign") %}
 			{% set adminlinkalign = common.addpx(common.getwidgetinfo("Adminlink", item, "align")) %}
-	<div id="admin_link" style="z-index: 100; position: fixed; background:none; {{ adminlinkvalign }}:{{ adminlinkalign }}; {{ adminlinkvmargin ~ ':' ~ adminlinkmargin if adminlinkvmargin != 'center' }}">
+	<div id="admin_link" style="z-index: 3; position: fixed; background:none; {{ adminlinkvalign }}:{{ adminlinkalign }}; {{ adminlinkvmargin ~ ':' ~ adminlinkmargin if adminlinkvmargin != 'center' }}">
 		<small style=float:{{ adminlinkvmargin }};>{{ common.datum.strftime("%d.%m.%Y %H:%M:%S") }}</small><br>
 		<a style="text-decoration: none;" href="../admin/">monitor<b>njus</b>{{ common.version|safe }} </a>&copy; Steffen Deusch
 	</div>

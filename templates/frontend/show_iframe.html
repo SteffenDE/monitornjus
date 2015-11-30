@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+	<link href="{{ url_for('static', filename='css/materialize.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+	{% if common.getinfo("REFRESHAKTIV", "global", 0) == 1 %}
+	<meta http-equiv="refresh" content="{{ common.getinfo("REFRESH", "global", 0) }}">
+	{% endif %}
+	<title>MonitorNjus</title>
+	<!-- MonitorNjus -->
+	<!-- Copyright (c) {{ common.datum.year }} Steffen Deusch -->
+	<!-- https://github.com/SteffenDE/MonitorNjus -->
+	<style>
+		html, body, iframe { height: 100%; }
+	</style>
+</head>
+<body>
+{% if geteilt %}
+	<iframe scrolling="no" frameborder="0" src="contentset?seite=1" name="links" style="float: left; position:static; width: {{ teilung|int }}%;" ></iframe>
+	<iframe scrolling="no" frameborder="0" src="contentset?seite=2" name="rechts" style="float: right; position:static; width: {{ 100-teilung|int }}%;" ></iframe>
+{% elif (linksgeteilt and not rechtsgeteilt and timeL) or (linksgeteilt and rechtsgeteilt and timeL and not timeR) %}
+	<iframe scrolling="no" frameborder="0" src="contentset?seite=1" name="links" style="position:static; width: 100%;" ></iframe>
+{% elif (rechtsgeteilt and not linksgeteilt and timeR) or (rechtsgeteilt and linksgeteilt and timeR and not timeL) %}
+	<iframe scrolling="no" frameborder="0" src="contentset?seite=2" name="rechts" style="position:static; width: 100%;" ></iframe>
+{% else %}
+{{ raise_helper("Warning('<h3>Warnung:</h3><h4>Keine Seite aktiv!</h4>')") }}
+{% endif %}
+</body>
+</html>
