@@ -32,8 +32,6 @@ def requires_auth(f):
 			return f(*args, **kwargs)
 	return decorated
 
-from functools import wraps
-
 def ssl_required(fn):
     @wraps(fn)
     def decorated_view(*args, **kwargs):
