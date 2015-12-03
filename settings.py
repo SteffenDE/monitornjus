@@ -5,6 +5,7 @@
 
 #### Settings ####
 
+SSL = False							# <- Force SSL for Admin-Panel
 triggerrefresh = False				# <- only enable when running with MULTIPLE workers, e.g. NOT the dev server
 
 running_with_iis = False 			# <- if running with iis

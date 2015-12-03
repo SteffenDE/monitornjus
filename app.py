@@ -37,6 +37,9 @@ if common.readsettings("APPKEY") == "None":
 else:
 	app.secret_key = common.readsettings("APPKEY")
 
+if settings.SSL:
+	app.config["SSL"] = True
+
 if settings.running_with_iis == True:
 	from werkzeug.wsgi import DispatcherMiddleware
 	iis_app = DispatcherMiddleware(app, {settings.iis_virtual_path: app})

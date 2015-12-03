@@ -44,7 +44,7 @@
 			{% set adminlinkalign = common.addpx(common.getwidgetinfo("Adminlink", item, "align")) %}
 	<div id="admin_link" style="z-index: 3; position: fixed; background:none; {{ adminlinkvalign }}:{{ adminlinkalign }}; {{ adminlinkvmargin ~ ':' ~ adminlinkmargin if adminlinkvmargin != 'center' }}">
 		<small style=float:{{ adminlinkvmargin }};>{{ common.datum.strftime("%d.%m.%Y %H:%M:%S") }}</small><br>
-		<a style="text-decoration: none;" href="../admin/">monitor<b>njus</b>{{ common.version|safe }} </a>&copy; Steffen Deusch
+		<a style="text-decoration: none;" href="{{ url_for("backend.admin_index") }}">monitor<b>njus</b>{{ common.version|safe }} </a>&copy; Steffen Deusch
 	</div>
 		{% endif %}
 	{% endfor %}

@@ -7,7 +7,7 @@
 # View Tools
 
 import settings
-from flask import request, Response, render_template
+from flask import request, Response, render_template, current_app, redirect
 from functools import wraps
 from modules.code import auth
 check_auth = auth.check_auth
@@ -31,3 +31,18 @@ def requires_auth(f):
 		else:
 			return f(*args, **kwargs)
 	return decorated
+
+from functools import wraps
+
+def ssl_required(fn):
+    @wraps(fn)
+    def decorated_view(*args, **kwargs):
+        if current_app.config.get("SSL"):
+            if request.is_secure:
+                return fn(*args, **kwargs)
+            else:
+                return redirect(request.url.replace("http://", "https://"))
+        
+        return fn(*args, **kwargs)
+            
+    return decorated_view
