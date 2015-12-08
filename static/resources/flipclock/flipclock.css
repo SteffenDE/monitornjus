@@ -6,11 +6,11 @@
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    /*-webkit-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     -ms-backface-visibility: hidden;
     -o-backface-visibility: hidden;
-    backface-visibility: hidden;*/
+    backface-visibility: hidden;
 }
 
 .flip-clock-wrapper a {
@@ -257,11 +257,45 @@
   100% {
     z-index: 4; } }
 
+.flip-clock-wrapper ul.play li.flip-clock-active .down {
+  z-index: 2;
+  -webkit-animation: turn 0.5s 0.5s linear both;
+  -moz-animation: turn 0.5s 0.5s linear both;
+  animation: turn 0.5s 0.5s linear both; }
+
+@-webkit-keyframes turn {
+  0% {
+    -webkit-transform: rotateX(90deg); }
+
+  100% {
+    -webkit-transform: rotateX(0deg); } }
+
+@-moz-keyframes turn {
+  0% {
+    -moz-transform: rotateX(90deg); }
+
+  100% {
+    -moz-transform: rotateX(0deg); } }
+
+@-o-keyframes turn {
+  0% {
+    -o-transform: rotateX(90deg); }
+
+  100% {
+    -o-transform: rotateX(0deg); } }
+
+@keyframes turn {
+  0% {
+    transform: rotateX(90deg); }
+
+  100% {
+    transform: rotateX(0deg); } }
+
 .flip-clock-wrapper ul.play li.flip-clock-before .up {
   z-index: 2;
-  /*-webkit-animation: turn2 0.5s linear both;
+  -webkit-animation: turn2 0.5s linear both;
   -moz-animation: turn2 0.5s linear both;
-  animation: turn2 0.5s linear both;*/ }
+  animation: turn2 0.5s linear both; }
 
 @-webkit-keyframes turn2 {
   0% {
@@ -294,7 +328,7 @@
 .flip-clock-wrapper ul li.flip-clock-active {
   z-index: 3; }
 
-/*
+/* SHADOW */
 .flip-clock-wrapper ul.play li.flip-clock-before .up .shadow {
   background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.1) 0%, black 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.1)), color-stop(100%, black));
@@ -317,7 +351,7 @@
   -moz-animation: hide 0.5s 0.3s linear both;
   animation: hide 0.5s 0.3s linear both; }
 
-
+/*DOWN*/
 .flip-clock-wrapper ul.play li.flip-clock-before .down .shadow {
   background: -moz-linear-gradient(top, black 0%, rgba(0, 0, 0, 0.1) 100%);
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, black), color-stop(100%, rgba(0, 0, 0, 0.1)));
@@ -395,4 +429,3 @@
 
   100% {
     opacity: 0; } }
-*/
