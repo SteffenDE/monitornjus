@@ -85,7 +85,14 @@ def updatetime(Seite, Nummer, referer, form):
 				tag = "*"
 			if monat is None:
 				monat = "*"
-			common.writeinfo(Seite, Nummer, "VONBIS", uhrzeit+"|"+wochentag+"|"+tag+"|"+monat)
+			zeit = uhrzeit+"|"+wochentag+"|"+tag+"|"+monat
+			try:
+				from ..code import checktime
+				import datetime
+				checktime.match(zeit,common.datum.now())
+			except Exception as e:
+				raise Warning("<h2>Fehler bei Zeitplan: "+str(e)+"</h2>")
+			common.writeinfo(Seite, Nummer, "VONBIS", zeit)
 	else:
 		raise Warning("Function updatetime: This referer is not allowed.")
 
