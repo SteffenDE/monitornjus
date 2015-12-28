@@ -8,5 +8,6 @@ http://monitornjus.steffend.de
 * Python 2.7
 * Flask, Jinja2
 * Webserver that can handle wsgi apps ([deployment instructions](http://flask.pocoo.org/docs/0.10/deploying/))
+
 #### Settings
 You can change many settings in the file 'settings.py'.
