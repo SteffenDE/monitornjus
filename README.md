@@ -12,12 +12,10 @@ Python WSGI application written for displaying various pages time-based or stati
 http://monitornjus.steffend.de
 
 ## Setup
-### German
-Was wird benötigt?
+### Requirements
 * Python 2.7
 * Flask, Jinja2
-* WSGI fähiger Webserver
+* Webserver that can handle wsgi apps ([deployment instructions](http://flask.pocoo.org/docs/0.10/deploying/))
 
-#### Einstellungen
-In der Datei "settings.py" werden mögliche Einstellungen vorgenommen.<br>
-Sollte man einen Apache mit mod_wsgi einsetzen, dann muss man den Pfad in der Datei "apache.wsgi" verändern.
+#### Settings
+You can change many settings in the file 'settings.py'.<br>
