@@ -3,7 +3,7 @@
 #
 # Copyright (c) 2015 Steffen Deusch
 # Licensed under the MIT license
-# MonitorNjus, 28.11.2015 (Version 1.1)
+# MonitorNjus, 06.01.2016 (Version 1.1.1)
 
 import os
 import os.path
@@ -11,7 +11,7 @@ import datetime
 import sqlite3
 
 datum = datetime.datetime.now()
-version = "1.1&beta;"
+version = "1.1.1&beta;"
 workingdir = os.path.dirname(os.path.realpath(__file__))
 dbpath = workingdir+'/../MonitorNjus.db'
 
@@ -87,27 +87,27 @@ def newwidget(ID, NAME, TYP, AKTIV, URLw, valign, align, vmargin, margin, width,
 	conn.commit()
 
 def firstrun():
-	with sqlite3.connect(dbpath, check_same_thread=False) as connt:
+	with sqlite3.connect(dbpath, check_same_thread=False) as conn:
 	
-		with open("schema.sql", "r") as dbscheme:
-			connt.executescript(dbscheme.read())
-			connt.commit()
+		with open(workingdir+"/schema.sql", "r") as dbscheme:
+			conn.executescript(dbscheme.read())
+			conn.commit()
 
-		write("Links", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
-		write("Rechts", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
-		write("globalmon", 0, "placeholder.html", 1, 1, 3600, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
-		write("global", 0, "placeholder.html", 1, 1, 1800, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
+		write("Links", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", conn)
+		write("Rechts", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", conn)
+		write("globalmon", 0, "placeholder.html", 1, 1, 3600, "*|*|*|*", "0px", "0px", "0px", "0px", conn)
+		write("global", 0, "placeholder.html", 1, 1, 1800, "*|*|*|*", "0px", "0px", "0px", "0px", conn)
 
-		writesettings("TEILUNG", "50", connt)
-		writesettings("REFRESH", "0", connt)
-		writesettings("APPKEY", "None")
-		writesettings("triggerrefresh", "False")
+		writesettings("TEILUNG", "50", conn)
+		writesettings("REFRESH", "0", conn)
+		writesettings("APPKEY", "None", conn)
+		writesettings("triggerrefresh", "False", conn)
 
-		newwidget(1, "Adminlink", "Adminlink", 1, "placeholder", "bottom", "0px", "center", "0px", "0", "0", connt)
-		newwidget(2, "Logo", "Logo", 0, "placeholder", "bottom", "0px", "left", "0px", "100%", "100%", connt)
-		newwidget(3, "Freies_Widget", "Freies_Widget", 0, """<iframe name="flipe" scrolling="no" src="http://www.daswetter.com/getwid/ef3e15e299d279eec78fbfc75d5190f6" id="ef3e15e299d279eec78fbfc75d5190f6" style="width: 250px; color: rgb(128, 128, 128); height: 142px;" frameborder="0"></iframe>""", "bottom", "-90px", "right", "145px", "100px", "200px", connt)
+		newwidget(1, "Adminlink", "Adminlink", 1, "placeholder", "bottom", "0px", "center", "0px", "0", "0", conn)
+		newwidget(2, "Logo", "Logo", 0, "placeholder", "bottom", "0px", "left", "0px", "100%", "100%", conn)
+		newwidget(3, "Freies_Widget", "Freies_Widget", 0, """<iframe name="flipe" scrolling="no" src="http://www.daswetter.com/getwid/ef3e15e299d279eec78fbfc75d5190f6" id="ef3e15e299d279eec78fbfc75d5190f6" style="width: 250px; color: rgb(128, 128, 128); height: 142px;" frameborder="0"></iframe>""", "bottom", "-90px", "right", "145px", "100px", "200px", conn)
 
-		connt.commit()
+		conn.commit()
 
 ######################### Displaysets #########################
 
