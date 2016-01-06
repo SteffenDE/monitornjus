@@ -87,53 +87,27 @@ def newwidget(ID, NAME, TYP, AKTIV, URLw, valign, align, vmargin, margin, width,
 	conn.commit()
 
 def firstrun():
-	connt = sqlite3.connect(dbpath, check_same_thread=False)
-	connt.execute('''CREATE TABLE DISPLAYSETS
-		(ID INT PRIMARY KEY,
-			SEITE			TEXT,
-			NUMMER			INT,
-			URL				TEXT,
-			AKTIV			INT,
-			REFRESH 		INT,
-			REFRESHAKTIV 	INT,
-			VONBIS			TEXT,
-			MARGINLEFT		TEXT,
-			MARGINRIGHT		TEXT,
-			MARGINTOP		TEXT,
-			MARGINBOTTOM	TEXT);''')
-	connt.execute('''CREATE TABLE WIDGETS
-		(ID INT PRIMARY KEY,
-			NAME			TEXT,
-			TYP				TEXT,
-			AKTIV			INT,
-			URL				TEXT,
-			valign			TEXT,
-			align			TEXT,
-			vmargin 		TEXT,
-			margin			TEXT,
-			width			TEXT,
-			height			TEXT);''')
-	connt.execute('''CREATE TABLE SETTINGS
-		(ID INT PRIMARY KEY,
-			NAME			TEXT,
-			VALUE			TEXT);''')
+	with sqlite3.connect(dbpath, check_same_thread=False) as connt:
+	
+		with open("schema.sql", "r") as dbscheme:
+			connt.executescript(dbscheme.read())
+			connt.commit()
 
-	write("Links", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
-	write("Rechts", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
-	write("globalmon", 0, "placeholder.html", 1, 1, 3600, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
-	write("global", 0, "placeholder.html", 1, 1, 1800, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
+		write("Links", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
+		write("Rechts", 1, "placeholder.html", 1, 1, 60, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
+		write("globalmon", 0, "placeholder.html", 1, 1, 3600, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
+		write("global", 0, "placeholder.html", 1, 1, 1800, "*|*|*|*", "0px", "0px", "0px", "0px", connt)
 
-	writesettings("TEILUNG", "50", connt)
-	writesettings("REFRESH", "0", connt)
-	writesettings("APPKEY", "None")
-	writesettings("triggerrefresh", "False")
+		writesettings("TEILUNG", "50", connt)
+		writesettings("REFRESH", "0", connt)
+		writesettings("APPKEY", "None")
+		writesettings("triggerrefresh", "False")
 
-	newwidget(1, "Adminlink", "Adminlink", 1, "placeholder", "bottom", "0px", "center", "0px", "0", "0", connt)
-	newwidget(2, "Logo", "Logo", 0, "placeholder", "bottom", "0px", "left", "0px", "100%", "100%", connt)
-	newwidget(3, "Freies_Widget", "Freies_Widget", 0, """<iframe name="flipe" scrolling="no" src="http://www.daswetter.com/getwid/ef3e15e299d279eec78fbfc75d5190f6" id="ef3e15e299d279eec78fbfc75d5190f6" style="width: 250px; color: rgb(128, 128, 128); height: 142px;" frameborder="0"></iframe>""", "bottom", "-90px", "right", "145px", "100px", "200px", connt)
+		newwidget(1, "Adminlink", "Adminlink", 1, "placeholder", "bottom", "0px", "center", "0px", "0", "0", connt)
+		newwidget(2, "Logo", "Logo", 0, "placeholder", "bottom", "0px", "left", "0px", "100%", "100%", connt)
+		newwidget(3, "Freies_Widget", "Freies_Widget", 0, """<iframe name="flipe" scrolling="no" src="http://www.daswetter.com/getwid/ef3e15e299d279eec78fbfc75d5190f6" id="ef3e15e299d279eec78fbfc75d5190f6" style="width: 250px; color: rgb(128, 128, 128); height: 142px;" frameborder="0"></iframe>""", "bottom", "-90px", "right", "145px", "100px", "200px", connt)
 
-	connt.commit()
-	connt.close()
+		connt.commit()
 
 ######################### Displaysets #########################
 

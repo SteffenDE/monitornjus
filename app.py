@@ -42,7 +42,7 @@ if settings.SSL:
 
 if settings.running_with_iis == True:
 	from werkzeug.wsgi import DispatcherMiddleware
-	iis_app = DispatcherMiddleware(app, {settings.iis_virtual_path: app})
+	app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {settings.iis_virtual_path: app.wsgi_app})
 	app.config["APPLICATION_ROOT"] = settings.iis_virtual_path
 
 ####### error #######
@@ -76,6 +76,8 @@ def internal_server_error(error):
 		return render_template('error/userwarning.html', error=error), 200
 	else:
 		return render_template('error/500.html', error="\n"+traceback.format_exc().rstrip()), 500
+
+####################
 
 if __name__ == '__main__':
 	app.run(host="0.0.0.0", debug=True)
