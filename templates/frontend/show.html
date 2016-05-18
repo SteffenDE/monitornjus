@@ -15,17 +15,17 @@
 {% if geteilt %}
 <frameset frameborder="0" rows="*,0">
 	<frameset frameborder="0" cols={{ teilung|int }},{{ 100-teilung|int }}>
-		<frame scrolling="no" src="contentset?seite=1" name="links" />
-		<frame scrolling="no" src="contentset?seite=2" name="rechts" />
+		<frame scrolling="no" src="contentset?seite=1{{ '&owndate='|safe ~ owndate if owndate != None else '' }}" name="links" />
+		<frame scrolling="no" src="contentset?seite=2{{ '&owndate='|safe ~ owndate if owndate != None else '' }}" name="rechts" />
 	</frameset> 
 </frameset>
 {% elif (linksgeteilt and not rechtsgeteilt and timeL) or (linksgeteilt and rechtsgeteilt and timeL and not timeR) %}
 <frameset frameborder="0" rows="*,0">
-	<frame scrolling="no" src="contentset?seite=1" name="links" />
+	<frame scrolling="no" src="contentset?seite=1{{ '&owndate='|safe ~ owndate if owndate != None else '' }}" name="links" />
 </frameset>
 {% elif (rechtsgeteilt and not linksgeteilt and timeR) or (rechtsgeteilt and linksgeteilt and timeR and not timeL) %}
 <frameset frameborder="0" rows="*,0">
-	<frame scrolling="no" src="contentset?seite=2" name="rechts" />
+	<frame scrolling="no" src="contentset?seite=2{{ '&owndate='|safe ~ owndate if owndate != None else '' }}" name="rechts" />
 </frameset>
 {% else %}
 {{ raise_helper("Warning('<h3>Warnung:</h3><h4>Keine Seite aktiv!</h4>')") }}

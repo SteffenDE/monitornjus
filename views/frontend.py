@@ -15,25 +15,28 @@ frontend = Blueprint('frontend', __name__, template_folder='templates')
 
 @frontend.route('/')
 def binindex():
+	import datetime
 	trigger = request.args.get("disabletrigger")
-	reload(common)
-	return render_template('frontend/index.html', common=common, settings=settings, trigger=trigger)
+	owndate = request.args.get("owndate")
+	return render_template('frontend/index.html', common=common, settings=settings, trigger=trigger, owndate=owndate)
 
 @frontend.route('/show')
 def binshow():
 	from modules.frontend import show
 	reload(show)
-	geteilt, linksgeteilt, rechtsgeteilt, timeR, timeL, teilung = show.show()
-	return render_template('frontend/show.html', common=common, geteilt=geteilt, linksgeteilt=linksgeteilt, rechtsgeteilt=rechtsgeteilt, timeR=timeR, timeL=timeL, teilung=teilung, raise_helper=raise_helper)
+	owndate = request.args.get("owndate")
+	geteilt, linksgeteilt, rechtsgeteilt, timeR, timeL, teilung = show.show(owndate)
+	return render_template('frontend/show.html', common=common, geteilt=geteilt, linksgeteilt=linksgeteilt, rechtsgeteilt=rechtsgeteilt, timeR=timeR, timeL=timeL, teilung=teilung, raise_helper=raise_helper, owndate=owndate)
 
 @frontend.route('/contentset')
 def bin_contentset():
 	from modules.frontend import contentset
 	from modules.code import getytid
+	owndate = request.args.get("owndate")
 	gseite = request.args.get('seite', None)
 	gnummer = request.args.get('nummer', None)
-	nummer, nextnummer, refreshon, refresh, seite, mseite, typ, url = contentset.contentset(gseite, gnummer)
-	return render_template('frontend/contentset.html', common=common, getytid=getytid, nummer=nummer, nextnummer=nextnummer, refreshon=refreshon, refresh=refresh, seite=seite, mseite=mseite, typ=typ, url=url)
+	nummer, nextnummer, refreshon, refresh, seite, mseite, typ, url = contentset.contentset(gseite, gnummer, owndate)
+	return render_template('frontend/contentset.html', common=common, getytid=getytid, nummer=nummer, nextnummer=nextnummer, refreshon=refreshon, refresh=refresh, seite=seite, mseite=mseite, typ=typ, url=url, owndate=owndate)
 
 @frontend.route('/triggerrefresh')
 def triggerrefresh():

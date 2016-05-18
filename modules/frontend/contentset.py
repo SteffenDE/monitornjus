@@ -13,7 +13,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
-def contentset(gseite, gnummer):
+def contentset(gseite, gnummer, owndate):
 	rows = common.getrows()
 	rand = False
 	fadeinzeit = 0.8
@@ -27,8 +27,8 @@ def contentset(gseite, gnummer):
 		raise Warning("Diese Seite existiert nicht!")
 	if gnummer is None:
 		x = 0
-		while x < rows:
-			if checktime.match(common.getinfo("VONBIS", mseite, int(common.minaktiv(mseite))+x),common.datum.now()) == True and common.getinfo("AKTIV", mseite, int(common.minaktiv(mseite))+x) == 1:
+		while x < rows and x+int(common.minaktiv(mseite)) <= rows:
+			if checktime.match(common.getinfo("VONBIS", mseite, int(common.minaktiv(mseite))+x),(common.datum.now() if owndate == None else common.datum.strptime(owndate, '%Y-%m-%d-%H-%M'))) == True and common.getinfo("AKTIV", mseite, int(common.minaktiv(mseite))+x) == 1:
 				nummer = int(common.minaktiv(mseite))+x
 				break
 			x += 1
@@ -44,7 +44,7 @@ def contentset(gseite, gnummer):
 	x = 1
 	while x < rows or x == 1:
 		if nummer < rows and nummer+x <= rows:
-			if common.getinfo("AKTIV", mseite, nummer+x) and checktime.match(common.getinfo("VONBIS", mseite, nummer+x),common.datum.now()):
+			if common.getinfo("AKTIV", mseite, nummer+x) and checktime.match(common.getinfo("VONBIS", mseite, nummer+x),(common.datum.now() if owndate == None else common.datum.strptime(owndate, '%Y-%m-%d-%H-%M'))):
 				refreshon = True
 				nextnummer = nummer + x
 				break
@@ -55,7 +55,7 @@ def contentset(gseite, gnummer):
 			refreshon = True
 			z = 0
 			while z < rows:
-				if checktime.match(common.getinfo("VONBIS", mseite, int(common.minaktiv(mseite))+z),common.datum.now()) and common.getinfo("AKTIV", mseite, int(common.minaktiv(mseite))+z):
+				if checktime.match(common.getinfo("VONBIS", mseite, int(common.minaktiv(mseite))+z),(common.datum.now() if owndate == None else common.datum.strptime(owndate, '%Y-%m-%d-%H-%M'))) and common.getinfo("AKTIV", mseite, int(common.minaktiv(mseite))+z):
 					nextnummer = int(common.minaktiv(mseite))+z
 					break
 				else:
