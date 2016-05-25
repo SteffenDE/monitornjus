@@ -13,39 +13,43 @@ from tools import requires_auth, ssl_required
 
 backend = Blueprint('backend', __name__, template_folder='templates')
 
-adminnav = [('../admin/', "Haupteinstellungen"), ('../admin/widgets', "Widgets"), ('../', "Frontend")]
+adminnav = [('../admin/', "Haupteinstellungen"),
+            ('../admin/widgets', "Widgets"), ('../', "Frontend")]
+
 
 @backend.route('/admin/')
 @ssl_required
 @requires_auth
 def admin_index():
-	reload(common)
-	from modules.code import colors
-	reload(colors)
-	return render_template('backend/index.html', common=common, settings=settings, colors=colors, navigation=adminnav)
+    reload(common)
+    from modules.code import colors
+    reload(colors)
+    return render_template('backend/index.html', common=common, settings=settings, colors=colors, navigation=adminnav)
+
 
 @backend.route('/admin/widgets')
 @ssl_required
 @requires_auth
 def admin_widgets():
-	reload(common)
-	from modules.code import colors
-	reload(colors)
-	return render_template('backend/widgets.html', common=common, colors=colors, navigation=adminnav)
+    reload(common)
+    from modules.code import colors
+    reload(colors)
+    return render_template('backend/widgets.html', common=common, colors=colors, navigation=adminnav)
+
 
 @backend.route('/admin/setn', methods=["GET", "POST"])
 @ssl_required
 @requires_auth
 def admin_setn():
-	from modules.backend import setn
+    from modules.backend import setn
 
-	form1 = request.form
-	form2 = request.args
-	form = {}
-	for item in form1:
-		form[item] = form1[item]
-	for item in form2:
-		form[item] = form2[item]
+    form1 = request.form
+    form2 = request.args
+    form = {}
+    for item in form1:
+        form[item] = form1[item]
+    for item in form2:
+        form[item] = form2[item]
 
-	refresh = setn.setn(form)
-	return render_template('backend/setn.html', refresh=refresh)
+    refresh = setn.setn(form)
+    return render_template('backend/setn.html', refresh=refresh)

@@ -12,25 +12,29 @@ from functools import wraps
 from modules.code import auth
 check_auth = auth.check_auth
 
+
 def raise_helper(msg):
-	raise eval(msg)
+    raise eval(msg)
+
 
 def authenticate():
-	"""Sends a 401 response that enables basic auth"""
-	return Response(render_template('error/401.html'), 401,
-	{'WWW-Authenticate': 'Basic realm="MonitorNjus Admin-Panel"'})
+    """Sends a 401 response that enables basic auth"""
+    return Response(render_template('error/401.html'), 401,
+                    {'WWW-Authenticate': 'Basic realm="MonitorNjus Admin-Panel"'})
+
 
 def requires_auth(f):
-	@wraps(f)
-	def decorated(*args, **kwargs):
-		if settings.auth_enabled:
-			auth = request.authorization
-			if not auth or not check_auth(auth.username, auth.password):
-				return authenticate()
-			return f(*args, **kwargs)
-		else:
-			return f(*args, **kwargs)
-	return decorated
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if settings.auth_enabled:
+            auth = request.authorization
+            if not auth or not check_auth(auth.username, auth.password):
+                return authenticate()
+            return f(*args, **kwargs)
+        else:
+            return f(*args, **kwargs)
+    return decorated
+
 
 def ssl_required(fn):
     @wraps(fn)
@@ -40,7 +44,7 @@ def ssl_required(fn):
                 return fn(*args, **kwargs)
             else:
                 return redirect(request.url.replace("http://", "https://"))
-        
+
         return fn(*args, **kwargs)
-            
+
     return decorated_view

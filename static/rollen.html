@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>steffend Autoroll</title>
+    <!-- Part of MonitorNjus -->
+    <!-- Copyright (c) Steffen Deusch -->
+    <!-- https://github.com/SteffenDE/MonitorNjus -->
+</head>
+<body>
+    <iframe src="" style="position:absolute; width:100%; height:100%; top:0px; left:0px;" frameborder="0" scrolling="no" id="mainframe"></iframe>
+    <!-- Scripts -->
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript">
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    var url = getParameterByName('url');
+    var direction = getParameterByName('direction') ? getParameterByName('direction') : "up";
+    var speed = getParameterByName('speed') ? getParameterByName('speed') : 15;
+    var steps = getParameterByName('steps') ? getParameterByName('steps') : 1;
+    var showlog = getParameterByName('log') ? true : false;
+    var animate = getParameterByName('animate') ? true : false;
+
+    var framefenster = $("#mainframe");
+    framefenster.css("visibility", "hidden");
+    framefenster.attr("src", url);
+
+    $(framefenster).load(function() {
+        autoresize_interval = setInterval(autoresize_frames, 200);
+    });
+
+    function autoresize_frames() {
+        if (framefenster.contents()) {
+            var framefenster_size = framefenster.contents().height();
+            if (showlog) console.log(framefenster_size);
+            framefenster.css("height", framefenster_size + 'px');
+            var height = $(window).height();
+            if (height != 150 || autoresize_interval > 10) {
+                clearInterval(autoresize_interval);
+            }
+            if (showlog) console.log("Framehöhe: "+framefenster_size)
+            if (showlog) console.log("Fensterhöhe: "+height)
+            if (framefenster_size <= height) {
+                framefenster.css('visibility', 'visible');
+                if (animate) framefenster.hide().fadeIn();
+            } else {
+                startrolling();
+            }
+        }
+    }
+
+    function startrolling() {
+        framefenster.removeAttr('id');
+        framefenster.removeAttr('style');
+        framefenster.css("width", "100%");
+        framefenster.css("height", "100%");
+        if (framefenster.css("height") == "150px") {
+            resizeIframe(framefenster);
+        }
+        var frame = framefenster.prop('outerHTML');;
+        framefenster.remove();
+        var strDir = direction;
+        var intRepeat = 2;
+        var intStep = steps;
+        var intPos = 0;
+        var strNews = frame;
+
+        for (i = 1; i < intRepeat; ++i) {
+            strNews += frame;
+        }
+
+        strTicker = '<div style="position:absolute; left:0px; top: 0px; width:100%; height:100%;"><div><div id="ticker" style="position:relative;">' + strNews + '</div></div></div>';
+        objTicker = $.parseHTML(strTicker);
+        $(objTicker).appendTo('body');
+
+        objTicker = $('#ticker');
+        if (animate) objTicker.hide().fadeIn();
+        arrDir = new Array();
+        arrDir['up'] = new Array(-1, objTicker.outerHeight(), 'top');
+        arrDir['down'] = new Array(1, objTicker.outerHeight(), 'top');
+        dblOffset = arrDir[strDir][1] / intRepeat;
+
+        if (showlog) console.log(objTicker.outerHeight());
+
+        function ticken() {
+            switch (strDir) {
+                case 'up':
+                    intPos = (Math.abs(intPos) > dblOffset) ? 0 : intPos;
+                    break;
+                case 'down':
+                    intPos = (intPos > 0) ? -dblOffset : intPos;
+                    break;
+            }
+            objTicker.css("transform", "translate3d(0," + intPos + "px,0)");
+            intPos += intStep * arrDir[strDir][0];
+        }
+        setInterval(ticken, speed);
+    }
+
+    function resizeIframe(obj) {
+        obj.css("height", obj.contents().height() + 'px');
+    }
+    </script>
+</html>

@@ -158,89 +158,89 @@ from datetime import datetime
 
 __version__ = '0.1'
 WEEKDAYS = {'mon': 0, 'tue': 1, 'wed': 2, 'thu': 3,
-			'fri': 4, 'sat': 5, 'sun': 6}
+            'fri': 4, 'sat': 5, 'sun': 6}
 MONTHS = {'jan': 1, 'feb': 2, 'mar': 3, 'apr': 4, 'may': 5,
-		  'jun': 6, 'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10,
-		  'nov': 11, 'dec': 12}
+          'jun': 6, 'jul': 7, 'aug': 8, 'sep': 9, 'oct': 10,
+          'nov': 11, 'dec': 12}
 
 
 def match(timespans, dt=None):
-	"""Determine if timestamp falls within one or more timespans"""
-	dt = dt or datetime.now()
-	if isinstance(timespans, basestring):
-		timespans = timespans.splitlines()
-	for timespan in timespans:
-		if not timespan.strip():
-			continue
-		if not match_one(timespan, dt):
-			return False
-	return True
+    """Determine if timestamp falls within one or more timespans"""
+    dt = dt or datetime.now()
+    if isinstance(timespans, basestring):
+        timespans = timespans.splitlines()
+    for timespan in timespans:
+        if not timespan.strip():
+            continue
+        if not match_one(timespan, dt):
+            return False
+    return True
 
 
 def match_one(timespan, dt=None):
-	"""Matches against only a single timespan"""
-	timespan = timespan.strip()
-	dt = dt or datetime.now()
-	if timespan.startswith('!'):
-		inverse = True
-		timespan = timespan[1:]
-	else:
-		inverse = False
-	ts = timespan.split('|') + ['*', '*', '*']
-	times, dows, days, months = ts[:4]
-	if times != '*':
-		lo, hi = _span(times, _parse_time)
-		if not _inside(dt.time(), lo, hi):
-			return inverse
-	if dows != '*':
-		lo, hi = _span(dows, _parse_weekday)
-		if not _inside(dt.weekday(), lo, hi):
-			return inverse
-	if days != '*':
-		lo, hi = _span(days, int)
-		if not _inside(dt.day, lo, hi):
-			return inverse
-	if months != '*':
-		lo, hi = _span(months, _parse_month)
-		if not _inside(dt.month, lo, hi):
-			return inverse
-	return not inverse
+    """Matches against only a single timespan"""
+    timespan = timespan.strip()
+    dt = dt or datetime.now()
+    if timespan.startswith('!'):
+        inverse = True
+        timespan = timespan[1:]
+    else:
+        inverse = False
+    ts = timespan.split('|') + ['*', '*', '*']
+    times, dows, days, months = ts[:4]
+    if times != '*':
+        lo, hi = _span(times, _parse_time)
+        if not _inside(dt.time(), lo, hi):
+            return inverse
+    if dows != '*':
+        lo, hi = _span(dows, _parse_weekday)
+        if not _inside(dt.weekday(), lo, hi):
+            return inverse
+    if days != '*':
+        lo, hi = _span(days, int)
+        if not _inside(dt.day, lo, hi):
+            return inverse
+    if months != '*':
+        lo, hi = _span(months, _parse_month)
+        if not _inside(dt.month, lo, hi):
+            return inverse
+    return not inverse
 
 
 def _span(val, f):
-	vals = [f(s) for s in val.split('-')]
-	if len(vals) == 1:
-		return vals[0], vals[0]
-	else:
-		lo, hi = vals
-		return lo, hi
+    vals = [f(s) for s in val.split('-')]
+    if len(vals) == 1:
+        return vals[0], vals[0]
+    else:
+        lo, hi = vals
+        return lo, hi
 
 
 def _inside(x, lo, hi):
-	if hi >= lo:
-		return lo <= x <= hi
-	else:
-		return x >= lo or x <= hi
+    if hi >= lo:
+        return lo <= x <= hi
+    else:
+        return x >= lo or x <= hi
 
 
 def _parse_time(s):
-	return datetime.strptime(s, '%H:%M').time()
+    return datetime.strptime(s, '%H:%M').time()
 
 
 def _parse_weekday(s):
-	if s in WEEKDAYS:
-		return WEEKDAYS[s[:3].lower()]
-	else:
-		raise ValueError('bad weekday', s)
+    if s in WEEKDAYS:
+        return WEEKDAYS[s[:3].lower()]
+    else:
+        raise ValueError('bad weekday', s)
 
 
 def _parse_month(s):
-	if s in MONTHS:
-		return MONTHS[s[:3].lower()]
-	else:
-		raise ValueError('bad month', s)
+    if s in MONTHS:
+        return MONTHS[s[:3].lower()]
+    else:
+        raise ValueError('bad month', s)
 
 
 if __name__ == "__main__":
-	import doctest
-	doctest.testmod()
+    import doctest
+    doctest.testmod()
